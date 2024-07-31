@@ -1,4 +1,4 @@
-import 'package:edu_vista/constants.dart';
+import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:flutter/material.dart';
 
 class CustomElevatedButton extends StatelessWidget {
@@ -30,7 +30,7 @@ class CustomElevatedButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(7.0),
             ),
-            backgroundColor: backgroundColor ?? KyellowColor,
+            backgroundColor: backgroundColor ?? ColorUtility.deepYellow,
             foregroundColor: foregroundColor ?? Colors.white,
           ),
           onPressed: () {},

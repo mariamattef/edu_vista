@@ -1,4 +1,4 @@
-import 'package:edu_vista/constants.dart';
+import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextButton extends StatelessWidget {
@@ -15,7 +15,8 @@ class CustomTextButton extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             label,
-            style: const TextStyle(color: KyellowColor, fontSize: 20),
+            style:
+                const TextStyle(color: ColorUtility.deepYellow, fontSize: 20),
           )),
     );
   }
