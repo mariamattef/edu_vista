@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         SplashPage.id: (context) => const SplashPage(),
         OnBoardingpage.id: (context) => OnBoardingpage(),
       },
-      initialRoute: OnBoardingpage.id,
+      initialRoute: LoginPage.id,
     );
   }
 }

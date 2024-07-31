@@ -1,4 +1,3 @@
-import 'package:edu_vista/constants.dart';
 import 'package:edu_vista/screens/login_page.dart';
 import 'package:edu_vista/widgets/Custom_text_button.dart';
 import 'package:edu_vista/widgets/custom_elevated_button.dart';
@@ -17,7 +16,6 @@ class _SignUpPAgeState extends State<SignUpPAge> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: KbgScafold,
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         children: [

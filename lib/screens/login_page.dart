@@ -1,7 +1,7 @@
-import 'package:edu_vista/constants.dart';
 import 'package:edu_vista/screens/confirm_password_page.dart';
 import 'package:edu_vista/screens/reset_password_page.dart';
 import 'package:edu_vista/screens/signup_page.dart';
+import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:edu_vista/widgets/Custom_text_button.dart';
 import 'package:edu_vista/widgets/custom_elevated_button.dart';
 import 'package:edu_vista/widgets/custom_text_form_field.dart';
@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: KbgScafold,
+      // backgroundColor: ColorUtility.gbScaffold,
       floatingActionButton: FloatingActionButton(onPressed: () {
         Navigator.push(context,
             MaterialPageRoute(builder: (ctx) => const ConfirmPasswrdPage()));
