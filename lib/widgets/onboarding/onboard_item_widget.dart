@@ -43,7 +43,7 @@ class OnBoardItemWidget extends StatelessWidget {
           ),
           // ignore: prefer_const_constructors
           SizedBox(
-            height: 70,
+            height: 0,
           )
         ],
       ),

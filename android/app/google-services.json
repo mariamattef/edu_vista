@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1028667050157",
+    "project_id": "edu-vista-cda7f",
+    "storage_bucket": "edu-vista-cda7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1028667050157:android:c27192c5a9efcafdfd9e24",
+        "android_client_info": {
+          "package_name": "com.example.edu_vista"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVK52tBImWg-1kuQ7hDSLV5df-vwipX1U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
