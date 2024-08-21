@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:edu_vista/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +21,8 @@ class AuthCubit extends Cubit<AuthState> {
 
       if (credentials.user != null) {
         emit(LoginSuccess());
+        Navigator.push(
+            context, MaterialPageRoute(builder: (ctx) => HomePage()));
       }
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) return;
