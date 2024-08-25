@@ -1,4 +1,4 @@
-import 'package:edu_vista/bloc/bloc/course_bloc.dart';
+import 'package:edu_vista/bloc/bloc_course/course_bloc.dart';
 import 'package:edu_vista/cubit/auth_cubit.dart';
 import 'package:edu_vista/firebase_options.dart';
 import 'package:edu_vista/pages/course_details_page.dart';
@@ -50,6 +50,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        textTheme: const TextTheme(
+          headlineSmall: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: ColorUtility.main,
+          ),
+        ),
         scaffoldBackgroundColor: ColorUtility.gbScaffold,
         fontFamily: ' PlusJakartaSans',
         colorScheme: ColorScheme.fromSeed(seedColor: ColorUtility.main),

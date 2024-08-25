@@ -640,10 +640,11 @@ packages:
   video_box:
     dependency: "direct main"
     description:
-      name: video_box
-      sha256: d82e2257e2a1f8ff994a8bdf069033f1dc52bd9b89547aa4c92e70e70090a000
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "3b291f53b1570109b5058e48aa242e5cd65ddccf"
+      url: "https://github.com/mahmoudelgharabawi/flutter_video_box.git"
+    source: git
     version: "0.17.0"
   video_player:
     dependency: transitive

@@ -1,4 +1,4 @@
-import 'package:edu_vista/bloc/bloc/course_bloc.dart';
+import 'package:edu_vista/bloc/bloc_course/course_bloc.dart';
 import 'package:edu_vista/models/course.dart';
 import 'package:edu_vista/widgets/course_options_widget.dart';
 import 'package:edu_vista/widgets/lecture_chips.dart';
