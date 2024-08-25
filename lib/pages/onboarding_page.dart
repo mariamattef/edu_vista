@@ -51,22 +51,30 @@ class OnBoardingpageState extends State<OnBoardingpage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: currentIndex == 3
-                  ? const SizedBox.shrink()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                            onPressed: () {
-                              skipFunction(3);
-                            },
-                            child: const Text(
-                              'Skip',
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w400),
-                            )),
-                      ],
-                    ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  currentIndex == 3
+                      ? TextButton(
+                          onPressed: () {
+                            _skipFunction(2);
+                          },
+                          child: const Text(
+                            'Back',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w400),
+                          ))
+                      : TextButton(
+                          onPressed: () {
+                            _skipFunction(3);
+                          },
+                          child: const Text(
+                            'Skip',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w400),
+                          )),
+                ],
+              ),
             ),
             Expanded(
               child: PageView(
@@ -139,48 +147,7 @@ class OnBoardingpageState extends State<OnBoardingpage> {
             const SizedBox(
               height: 30,
             ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  currentIndex == 0
-                      ? const SizedBox()
-                      : ElevatedButtonRounded(
-                          onPressed: () {
-                            previousFunction();
-                          },
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            size: 40,
-                          ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            ColorUtility.grayLight,
-                          ),
-                        ),
-                  currentIndex == 3
-                      ? const SizedBox()
-                      : ElevatedButtonRounded(
-                          onPressed: () {
-                            nextFunction();
-                          },
-                          icon: const Icon(
-                            Icons.arrow_forward,
-                            size: 40,
-                          ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            ColorUtility.deepYellow,
-                          ),
-                        ),
-                ],
-              ),
-            ),
-            currentIndex == 3
-                ? CustomElevatedButton(
-                    onPressed: onLogin,
-                    child: const Text('LogIn'),
-                  )
-                : const SizedBox(),
+            getButtons,
           ],
         ),
       ),
@@ -200,7 +167,7 @@ class OnBoardingpageState extends State<OnBoardingpage> {
     _pageController.previousPage(duration: _kDuration, curve: _kCurve);
   }
 
-  skipFunction(int index) {
+  _skipFunction(int index) {
     _pageController.jumpToPage(index);
   }
 
@@ -208,4 +175,44 @@ class OnBoardingpageState extends State<OnBoardingpage> {
     PreferencesService.isOnBoardingSeen = true;
     Navigator.pushReplacementNamed(context, LoginPage.id);
   }
+
+  Widget get getButtons => currentIndex == 3
+      ? CustomElevatedButton(
+          width: double.infinity, onPressed: () => onLogin(), text: 'Login')
+      : Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              currentIndex == 0 || currentIndex == 3
+                  ? const Text('')
+                  : ElevatedButtonRounded(
+                      onPressed: () {
+                        previousFunction();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        size: 30,
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        ColorUtility.grayLight,
+                      ),
+                    ),
+              currentIndex == 3
+                  ? SizedBox.shrink()
+                  : ElevatedButtonRounded(
+                      onPressed: () {
+                        nextFunction();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_forward,
+                        size: 30,
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        ColorUtility.deepYellow,
+                      ),
+                    ),
+            ],
+          ),
+        );
 }

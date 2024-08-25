@@ -20,9 +20,15 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       if (credentials.user != null) {
-        emit(LoginSuccess());
-        Navigator.push(
-            context, MaterialPageRoute(builder: (ctx) => HomePage()));
+        if (!context.mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('You Logged In Successfully'),
+          ),
+        );
+
+        Navigator.pushReplacementNamed(context, HomePage.id);
       }
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) return;
@@ -84,6 +90,7 @@ class AuthCubit extends Cubit<AuthState> {
             content: Text('Account created successfully'),
           ),
         );
+        Navigator.pushReplacementNamed(context, HomePage.id);
       }
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) return;

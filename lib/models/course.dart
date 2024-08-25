@@ -1,4 +1,4 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_vista/models/category.dart';
 import 'package:edu_vista/models/instructor.dart';
 
@@ -35,9 +35,9 @@ class Course {
         ? (data['rating'] as int).toDouble()
         : data['rating'];
     total_hours = data['total_hours'];
-    // created_date = data['created_date'] != null
-    //     ? (data['created_date'] as Timestamp).toDate()
-    //     : null;
+    created_date = data['created_date'] != null
+        ? (data['created_date'] as Timestamp).toDate()
+        : null;
   }
 
   Map<String, dynamic> toJson() {

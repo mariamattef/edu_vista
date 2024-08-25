@@ -10,9 +10,11 @@ class CustomTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerRight,
-      child: TextButton(
-          style: const ButtonStyle(alignment: Alignment.centerRight),
-          onPressed: onPressed,
+      child: InkWell(
+          // style: const ButtonStyle(
+          //     padding: MaterialStatePropertyAll(EdgeInsets.zero),
+          //     alignment: Alignment.centerRight),
+          onTap: onPressed,
           child: Text(
             label,
             style:

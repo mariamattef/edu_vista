@@ -3,7 +3,6 @@ import 'package:edu_vista/pages/signup_page.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:edu_vista/widgets/Custom_text_button.dart';
 import 'package:edu_vista/widgets/custom_elevated_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AuthTemplateWidget extends StatefulWidget {
@@ -115,6 +114,9 @@ class _AuthTemplateWidgetState extends State<AuthTemplateWidget> {
                 ],
               ),
             ),
+            SizedBox(
+              height: 5,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -153,60 +155,57 @@ class _AuthTemplateWidgetState extends State<AuthTemplateWidget> {
             style: const TextStyle(fontSize: 27, fontWeight: FontWeight.w700),
           ),
           Expanded(
-            child: Padding(
-              padding: _padding,
-              child: SingleChildScrollView(
-                child: Form(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    widget.body,
-                    CustomTextButton(
-                      label: 'Forgot Password ?',
-                      onPressed: () {},
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomElevatedButton(
-                            horizontal: 0,
-                            onPressed: () async {
-                              if (isLogin) {
-                                setState(() {
-                                  _isLoading = true;
-                                });
-                                await widget.onLogin?.call();
-                                setState(() {
-                                  _isLoading = false;
-                                });
-                              } else {
-                                setState(() {
-                                  _isLoading = true;
-                                });
-                                await widget.onSignUp?.call();
-                                setState(() {
-                                  _isLoading = false;
-                                });
-                              }
-                            },
-                            child: _isLoading
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  )
-                                : Text(
-                                    title,
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                          ),
+            child: SingleChildScrollView(
+              child: Form(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  widget.body,
+                  CustomTextButton(
+                    label: 'Forgot Password ?',
+                    onPressed: () {},
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomElevatedButton(
+                          horizontal: 20,
+                          onPressed: () async {
+                            if (isLogin) {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              await widget.onLogin?.call();
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            } else {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              await widget.onSignUp?.call();
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            }
+                          },
+                          child: _isLoading
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text(
+                                  title,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700),
+                                ),
                         ),
-                      ],
-                    ),
-                  ],
-                )),
-              ),
+                      ),
+                    ],
+                  ),
+                ],
+              )),
             ),
           ),
         ],
