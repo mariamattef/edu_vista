@@ -1,6 +1,7 @@
+import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:edu_vista/widgets/categories_widget.dart';
 import 'package:edu_vista/widgets/courses_widget.dart';
-import 'package:edu_vista/widgets/label_widget.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -16,44 +17,79 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // bottomNavigationBar: BottomNavigationBarExample(),
       appBar: AppBar(
-        title: Text(
-            'Welcome Back! ${FirebaseAuth.instance.currentUser?.displayName}'),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
+        title: RichText(
+          text: TextSpan(
             children: [
-              LabelWidget(
-                name: 'Categories',
-                onSeeAllClicked: () {},
+              TextSpan(
+                text: 'Welcome Back!  ',
+                style: TextStyle(color: Colors.black, fontSize: 20),
               ),
-              CategoriesWidget(),
-              const SizedBox(
-                height: 20,
-              ),
-              LabelWidget(
-                name: 'Top Rated Courses',
-                onSeeAllClicked: () {},
-              ),
-              const CoursesWidget(
-                rankValue: 'top rated',
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              LabelWidget(
-                name: 'Top Seller Courses',
-                onSeeAllClicked: () {},
-              ),
-              const CoursesWidget(
-                rankValue: 'top seller',
+              TextSpan(
+                text: '${FirebaseAuth.instance.currentUser?.displayName}',
+                style: TextStyle(
+                    color: ColorUtility.main,
+                    fontSize: 25,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'PlusJakartaSans'), // Set color to yellow
               ),
             ],
           ),
         ),
       ),
+
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.pushNamed(context, Test2Page.id);
+      //   },
+      //   child: Icon(Icons.search),
+      //   backgroundColor: ColorUtility.main,
+      // ),
+
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              CategoriesWidget(),
+              Expanded(
+                child: ListView(children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  CoursesWidget(
+                    name: 'Students Also Search for',
+                    rankValue: '',
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  CoursesWidget(
+                    name: 'Top Rated Courses',
+                    rankValue: 'top rated',
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  CoursesWidget(
+                    name: 'Top Seller Courses',
+                    rankValue: 'top seller',
+                  ),
+                ]),
+              ),
+              // TabBarExample()
+            ],
+          ),
+        ),
+      ),
+      // bottomNavigationBar: BottomNavPage(),
     );
   }
 }

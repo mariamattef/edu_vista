@@ -3,22 +3,23 @@ import 'package:flutter/material.dart';
 
 class CustomTextButton extends StatelessWidget {
   String label;
+  Color? color;
   void Function()? onPressed;
-  CustomTextButton({required this.label, required this.onPressed, super.key});
+  CustomTextButton(
+      {required this.label,
+      this.color = ColorUtility.deepYellow,
+      required this.onPressed,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerRight,
       child: InkWell(
-          // style: const ButtonStyle(
-          //     padding: MaterialStatePropertyAll(EdgeInsets.zero),
-          //     alignment: Alignment.centerRight),
           onTap: onPressed,
           child: Text(
             label,
-            style:
-                const TextStyle(color: ColorUtility.deepYellow, fontSize: 20),
+            style: TextStyle(color: color ?? Color(0xFFEA4335), fontSize: 20),
           )),
     );
   }

@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class LabelWidget extends StatelessWidget {
   final String name;
+  bool showAndHide = false;
   final void Function()? onSeeAllClicked;
-  const LabelWidget({required this.name, this.onSeeAllClicked, super.key});
+  LabelWidget(
+      {required this.name,
+      this.onSeeAllClicked,
+      this.showAndHide = false,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +23,8 @@ class LabelWidget extends StatelessWidget {
           ),
           InkWell(
             onTap: onSeeAllClicked,
-            child: const Text(
-              'See All',
+            child: Text(
+              showAndHide ? 'Hide Courses' : 'See All',
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
           ),

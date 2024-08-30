@@ -26,3 +26,18 @@ final class LoginFailed extends LoginState {
 
   LoginFailed(this.error);
 }
+
+final class Unauthenticated extends LoginState {}
+
+// Rest Pssword state
+final class resetPasswordStete extends AuthState {}
+
+final class resetPasswordLoadingStete extends resetPasswordStete {}
+
+final class resetPasswordSuccessStete extends resetPasswordStete {}
+
+final class resetPasswordFailedStete extends resetPasswordStete {
+  final String error;
+
+  resetPasswordFailedStete(this.error);
+}

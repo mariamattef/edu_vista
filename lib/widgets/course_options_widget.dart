@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_vista/models/course.dart';
 import 'package:edu_vista/models/lecture.dart';
 import 'package:edu_vista/utils/app_enum.dart';
+import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:flutter/material.dart';
 
 class CourseOptionsWidgets extends StatefulWidget {
@@ -19,6 +20,13 @@ class CourseOptionsWidgets extends StatefulWidget {
 }
 
 class _CourseOptionsWidgetsState extends State<CourseOptionsWidgets> {
+  bool showAllLectures = false;
+  void toggleShowAllCourses() {
+    setState(() {
+      showAllLectures = !showAllLectures; // Toggle the visibility state
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (widget.courseOption) {
@@ -54,6 +62,12 @@ class _CourseOptionsWidgetsState extends State<CourseOptionsWidgets> {
                       .toList() ??
                   []);
 
+              if (!showAllLectures) {
+                lectures = lectures
+                    .take(2)
+                    .toList(); // Show only 2 courses if not "See All"
+              }
+
               return GridView.count(
                 mainAxisSpacing: 15,
                 crossAxisSpacing: 15,
@@ -65,11 +79,51 @@ class _CourseOptionsWidgetsState extends State<CourseOptionsWidgets> {
                     child: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: const Color(0xffE0E0E0),
+                        color: ColorUtility.grayExtraLight,
                         borderRadius: BorderRadius.circular(40),
                       ),
-                      child: Center(
-                        child: Text(lectures[index].title ?? 'No Name'),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Lecture ${index + 1}',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700)),
+                                Icon(Icons.file_download_outlined)
+                              ],
+                            ),
+                            Text(
+                              lectures[index].title ?? 'No Name',
+                            ),
+                            Text(
+                                lectures[index].describtion ?? 'No describtion',
+                                style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w300)),
+                            SizedBox(height: 30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Duration: ${lectures[index].duration}',
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w300)),
+                                Icon(
+                                  Icons.play_circle_outline,
+                                  size: 35,
+                                  color: Colors.white,
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   );

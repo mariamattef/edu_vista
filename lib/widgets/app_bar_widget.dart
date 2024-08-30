@@ -10,11 +10,11 @@ class AppBarWidget extends StatelessWidget {
     return AppBar(
       title: Text(
         label,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
       ),
-      actions: [
+      actions: const [
         Padding(
-          padding: const EdgeInsets.only(right: 20),
+          padding: EdgeInsets.only(right: 20),
           child: Icon(
             Icons.shopping_cart,
             size: 30,

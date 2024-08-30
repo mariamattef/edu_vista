@@ -1,8 +1,12 @@
+import 'package:edu_vista/cubit/auth_cubit.dart';
+import 'package:edu_vista/pages/reset_password_page.dart';
 import 'package:edu_vista/widgets/custom_elevated_button.dart';
 import 'package:edu_vista/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ConfirmPasswrdPage extends StatefulWidget {
+  static const String id = 'ConfirmPasswrdPage';
   const ConfirmPasswrdPage({super.key});
 
   @override
@@ -10,13 +14,13 @@ class ConfirmPasswrdPage extends StatefulWidget {
 }
 
 class _ConfirmPasswrdPageState extends State<ConfirmPasswrdPage> {
+  final _email = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(
               height: 50,
@@ -28,40 +32,49 @@ class _ConfirmPasswrdPageState extends State<ConfirmPasswrdPage> {
             const SizedBox(
               height: 200,
             ),
-            Form(
-                child: Padding(
+            Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Column(
+              child: CustomTextFormField(
+                controller: _email,
+                hintText: 'Demo@gmail.com',
+                labelText: 'Email',
+                keyboardType: TextInputType.emailAddress,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
                 children: [
-                  CustomTextFormField(
-                    hintText: '***********',
-                    labelText: 'Password',
-                    obscureText: true,
-                    keyboardType: TextInputType.visiblePassword,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomTextFormField(
-                    hintText: '***********',
-                    labelText: 'Confirm Password',
-                    obscureText: true,
-                    keyboardType: TextInputType.visiblePassword,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomElevatedButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'SUBMIT',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  Expanded(
+                    child: CustomElevatedButton(
+                      onPressed: () async {
+                        
+                        await context.read<AuthCubit>().resetPassword(
+                              context: context,
+                              emailController: _email,
+                            );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Password reset link sent to your email',
+                            ),
+                          ),
+                        );
+                        Navigator.pushNamed(context, ResetPasswordPage.id);
+                      },
+                      child: const Text(
+                        'SUBMIT',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w700),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
-            ))
+            )
           ],
         ),
       ),

@@ -20,10 +20,12 @@ class Lecture {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['title'] = title;
-    data['describtion'] = describtion;
-    data['duration'] = duration;
+    data['id'] = id as String;
+    data['title'] = title as String;
+    data['describtion'] = describtion as String;
+    data['duration'] is String
+        ? int.tryParse(data['duration'] as String)
+        : data['duration'] as int?;
     data['lecture_url'] = lecture_url;
     data['sort'] = sort;
     data['watched_users'] = watched_users;

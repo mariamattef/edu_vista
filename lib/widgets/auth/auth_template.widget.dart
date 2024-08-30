@@ -1,4 +1,5 @@
 import 'package:edu_vista/pages/login_page.dart';
+import 'package:edu_vista/pages/confirm_password_page.dart';
 import 'package:edu_vista/pages/signup_page.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:edu_vista/widgets/Custom_text_button.dart';
@@ -164,7 +165,9 @@ class _AuthTemplateWidgetState extends State<AuthTemplateWidget> {
                   widget.body,
                   CustomTextButton(
                     label: 'Forgot Password ?',
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, ConfirmPasswrdPage.id);
+                    },
                   ),
                   Row(
                     children: [
