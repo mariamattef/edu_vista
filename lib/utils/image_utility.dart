@@ -5,4 +5,5 @@ class ImageUtility {
   static const String progresTraking = '${path}progresTraking.png';
   static const String offLine = '${path}offLine.png';
   static const String curseCategory = '${path}curseCategory.png';
+  static const String frame = '${path}Frame.png';
 }

@@ -1,5 +1,5 @@
 import 'package:edu_vista/cubit/auth_cubit.dart';
-import 'package:edu_vista/pages/reset_password_page.dart';
+import 'package:edu_vista/pages/authPages/reset_password_page.dart';
 import 'package:edu_vista/widgets/custom_elevated_button.dart';
 import 'package:edu_vista/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +51,6 @@ class _ConfirmPasswrdPageState extends State<ConfirmPasswrdPage> {
                   Expanded(
                     child: CustomElevatedButton(
                       onPressed: () async {
-                        
                         await context.read<AuthCubit>().resetPassword(
                               context: context,
                               emailController: _email,

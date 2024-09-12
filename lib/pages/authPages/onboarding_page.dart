@@ -1,5 +1,5 @@
-import 'package:edu_vista/pages/login_page.dart';
-import 'package:edu_vista/pages/signup_page.dart';
+import 'package:edu_vista/pages/authPages/login_page.dart';
+import 'package:edu_vista/pages/authPages/signup_page.dart';
 import 'package:edu_vista/services/pref.service.dart';
 
 import 'package:edu_vista/utils/color_utilis.dart';

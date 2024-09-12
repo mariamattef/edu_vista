@@ -1,6 +1,6 @@
-import 'package:edu_vista/pages/login_page.dart';
-import 'package:edu_vista/pages/confirm_password_page.dart';
-import 'package:edu_vista/pages/signup_page.dart';
+import 'package:edu_vista/pages/authPages/login_page.dart';
+import 'package:edu_vista/pages/authPages/confirm_password_page.dart';
+import 'package:edu_vista/pages/authPages/signup_page.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:edu_vista/widgets/Custom_text_button.dart';
 import 'package:edu_vista/widgets/custom_elevated_button.dart';

@@ -1,22 +1,31 @@
-import 'package:edu_vista/bloc/bloc_course/course_bloc.dart';
+import 'package:edu_vista/blocs/course/course_bloc.dart';
+import 'package:edu_vista/blocs/lecture/lecture_bloc.dart';
 import 'package:edu_vista/cubit/auth_cubit.dart';
 import 'package:edu_vista/firebase_options.dart';
+import 'package:edu_vista/pages/all_categories_page.dart';
+import 'package:edu_vista/pages/category_course_page.dart';
+import 'package:edu_vista/pages/chatPages/calls_search_page.dart';
+import 'package:edu_vista/pages/card_page.dart';
 import 'package:edu_vista/pages/categories_page.dart';
-import 'package:edu_vista/pages/profile_page.dart';
-import 'package:edu_vista/pages/reset_password_page.dart';
+import 'package:edu_vista/pages/chatPages/chat_page.dart';
+import 'package:edu_vista/pages/chatPages/contacts_page.dart';
+import 'package:edu_vista/pages/profilePages/edit_profile_page.dart';
+import 'package:edu_vista/pages/chatPages/message_page.dart';
+import 'package:edu_vista/pages/profilePages/profile_page.dart';
+import 'package:edu_vista/pages/chatPages/search_chat_page.dart';
+import 'package:edu_vista/pages/profilePages/settings_profile_page.dart';
+import 'package:edu_vista/pages/authPages/reset_password_page.dart';
 import 'package:edu_vista/pages/course_details_page.dart';
 import 'package:edu_vista/pages/home_page.dart';
-import 'package:edu_vista/pages/login_page.dart';
-import 'package:edu_vista/pages/onboarding_page.dart';
-import 'package:edu_vista/pages/confirm_password_page.dart';
-import 'package:edu_vista/pages/signup_page.dart';
-import 'package:edu_vista/pages/splash_page.dart';
-import 'package:edu_vista/pages/test2_page.dart';
-import 'package:edu_vista/pages/test_screen.dart';
+import 'package:edu_vista/pages/authPages/login_page.dart';
+import 'package:edu_vista/pages/authPages/onboarding_page.dart';
+import 'package:edu_vista/pages/authPages/confirm_password_page.dart';
+import 'package:edu_vista/pages/authPages/signup_page.dart';
+import 'package:edu_vista/pages/authPages/splash_page.dart';
+import 'package:edu_vista/pages/search_page.dart';
 import 'package:edu_vista/services/pref.service.dart';
 import 'package:edu_vista/services/storage.services.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
-import 'package:edu_vista/pages/botton_nav_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +48,10 @@ void main() async {
       BlocProvider(
         create: (context) => AuthCubit(),
       ),
-      BlocProvider(create: (ctx) => CourseBloc()),
+      BlocProvider(
+        create: (ctx) => CourseBloc(),
+      ),
+      BlocProvider(create: (ctx) => LectureBloc()),
     ],
     child: const MyApp(),
   ));
@@ -54,9 +66,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       scrollBehavior: _CustomScrollBehaviour(),
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
       theme: ThemeData(
-        appBarTheme: AppBarTheme(color: ColorUtility.gbScaffold),
+        appBarTheme: const AppBarTheme(color: ColorUtility.gbScaffold),
         textTheme: const TextTheme(
           headlineSmall: TextStyle(
             fontSize: 24,
@@ -100,23 +111,57 @@ class MyApp extends StatelessWidget {
                 builder: (context) => CourseDetailsPage(
                       course: data,
                     ));
-          case CategoriesPage.id:
+          // case CategoriesPage.id:
+          //   return MaterialPageRoute(
+          //       builder: (context) => const CategoriesPage());
+          case AllCategoryPage.id:
             return MaterialPageRoute(
-                builder: (context) => const CategoriesPage());
+                builder: (context) => const AllCategoryPage());
+          // case AllCoursesPage.id:
+          //   if (data is String) {
+          //     return MaterialPageRoute(
+          //       builder: (context) => AllCoursesPage(
+          //         rankValue: data,
+          //       ),
+          //     );
+          //   } else {
+          //     return null;
+          //   }
+
           case ProfilePage.id:
             return MaterialPageRoute(builder: (context) => const ProfilePage());
-          case BottomNavPage.id:
-            return MaterialPageRoute(
-                builder: (context) => const BottomNavPage());
-          case AudioCallingScreen.id:
-            return MaterialPageRoute(
-                builder: (context) => const AudioCallingScreen());
 
-          // case Test2Page.id:
-          //   return MaterialPageRoute(
-          //       builder: (context) => Test2Page(
-          //             categoryName: '',
-          //           ));
+          case CartPage.id:
+            return MaterialPageRoute(builder: (context) => const CartPage());
+          case CategoryCoursesPage.id:
+            return MaterialPageRoute(
+                builder: (context) => CategoryCoursesPage(
+                      categoryName: data,
+                    ));
+
+          case EditProfilePage.id:
+            return MaterialPageRoute(
+                builder: (context) => const EditProfilePage());
+          case SettingsProfilePage.id:
+            return MaterialPageRoute(
+                builder: (context) => const SettingsProfilePage());
+          case ChatsPage.id:
+            return MaterialPageRoute(builder: (context) => const ChatsPage());
+          case CallsSearchPage.id:
+            return MaterialPageRoute(
+                builder: (context) => const CallsSearchPage());
+          case ContactsPage.id:
+            return MaterialPageRoute(
+                builder: (context) => const ContactsPage());
+          case MessagesPage.id:
+            return MaterialPageRoute(
+                builder: (context) => const MessagesPage());
+          case ContactSearchChatPage.id:
+            return MaterialPageRoute(
+                builder: (context) => ContactSearchChatPage());
+
+          case SearchPage.id:
+            return MaterialPageRoute(builder: (context) => const SearchPage());
 
           default:
             return MaterialPageRoute(builder: (context) => const SplashPage());

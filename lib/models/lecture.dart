@@ -6,7 +6,15 @@ class Lecture {
   String? lecture_url;
   int? sort;
   List<String>? watched_users;
-
+  Lecture(
+    this.id,
+    this.title,
+    this.describtion,
+    this.duration,
+    this.lecture_url,
+    this.sort,
+    this.watched_users,
+  );
   Lecture.fromJson(Map<String, dynamic> data) {
     id = data['id'];
     title = data['title'];

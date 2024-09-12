@@ -1,4 +1,7 @@
 import 'package:edu_vista/cubit/auth_cubit.dart';
+import 'package:edu_vista/pages/card_page.dart';
+import 'package:edu_vista/pages/profilePages/edit_profile_page.dart';
+import 'package:edu_vista/pages/profilePages/settings_profile_page.dart';
 import 'package:edu_vista/widgets/Custom_text_button.dart';
 import 'package:edu_vista/widgets/profile/profile_menu_widget.dart';
 import 'package:edu_vista/widgets/profile/proflle_pic_widget.dart';
@@ -21,7 +24,9 @@ class ProfilePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 10),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, CartPage.id);
+                },
                 icon: const Icon(
                   Icons.shopping_cart_outlined,
                   size: 30,
@@ -37,15 +42,15 @@ class ProfilePage extends StatelessWidget {
             const SizedBox(height: 120),
             ProfileMenu(
               text: "Edit",
-              press: () => {},
+              press: () => {
+                Navigator.pushNamed(context, EditProfilePage.id),
+              },
             ),
             ProfileMenu(
               text: "Setting ",
-              press: () {},
-            ),
-            ProfileMenu(
-              text: "Achievements",
-              press: () {},
+              press: () {
+                Navigator.pushNamed(context, SettingsProfilePage.id);
+              },
             ),
             ProfileMenu(
               text: "About Us",

@@ -41,3 +41,32 @@ final class resetPasswordFailedStete extends resetPasswordStete {
 
   resetPasswordFailedStete(this.error);
 }
+
+class AuthDeleteLoadingState extends AuthState {}
+
+class AuthDeleteSuccessededState extends AuthState {
+  final String message;
+
+  AuthDeleteSuccessededState(this.message);
+}
+
+class AuthDeleteFailingState extends AuthState {
+  final String error;
+
+  AuthDeleteFailingState(this.error);
+}
+
+class UProPicUpdateLoadingState extends AuthState {}
+
+class UProPicUpdateSuccessState extends AuthState {
+  final String message;
+  final String? downloadUrl;
+
+  UProPicUpdateSuccessState(this.message, {this.downloadUrl});
+}
+
+class UProPicUpdateFailedState extends AuthState {
+  final String error;
+
+  UProPicUpdateFailedState(this.error);
+}

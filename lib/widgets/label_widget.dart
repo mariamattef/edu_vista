@@ -1,19 +1,22 @@
+import 'package:edu_vista/models/course.dart';
 import 'package:flutter/material.dart';
 
 class LabelWidget extends StatelessWidget {
   final String name;
-  bool showAndHide = false;
+  bool showAllCourses = false;
+  final Course? courses;
   final void Function()? onSeeAllClicked;
   LabelWidget(
       {required this.name,
+      this.showAllCourses = false,
       this.onSeeAllClicked,
-      this.showAndHide = false,
-      super.key});
+      super.key,
+      this.courses});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.only(bottom: 15, left: 21, right: 23),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -24,7 +27,7 @@ class LabelWidget extends StatelessWidget {
           InkWell(
             onTap: onSeeAllClicked,
             child: Text(
-              showAndHide ? 'Hide Courses' : 'See All',
+              showAllCourses ? 'Hide Courses' : 'See All',
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
           ),

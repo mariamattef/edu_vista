@@ -1,9 +1,14 @@
-import 'package:bloc/bloc.dart';
+import 'dart:nativewrappers/_internal/vm/lib/developer.dart';
+
+import 'package:edu_vista/pages/authPages/login_page.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:edu_vista/pages/botton_nav_page.dart';
 import 'package:edu_vista/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'auth_state.dart';
 
@@ -32,7 +37,7 @@ class AuthCubit extends Cubit<AuthState> {
           ),
         );
 
-        Navigator.pushReplacementNamed(context, BottomNavPage.id);
+        Navigator.pushReplacementNamed(context, HomePage.id);
       }
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) return;
@@ -208,33 +213,117 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // Future<void> deleteUser(BuildContext context) async {
-  //   try {
-  //     User? user = _auth.currentUser;
+  Future<void> deleteUser(BuildContext context) async {
+    emit(AuthDeleteLoadingState());
 
-  //     if (user != null) {
-  //       // Delete the user's data from Firestore
-  //       await _firestore.collection('users').doc(user.uid).delete();
+    try {
+      var user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        emit(AuthDeleteFailingState('No user logged'));
+        return;
+      }
 
-  //       // Delete the user's authentication account
-  //       await user.delete();
+      await user.delete();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
 
-  //       // Update the state and navigate to the login page
-  //       emit(Unauthenticated());
-  //       Navigator.of(context).pushReplacementNamed(LoginPage.id);
-  //     }
-  //   } catch (e) {
-  //     // Handle errors (e.g., re-authentication required)
-  //     print('Error deleting user: $e');
-  //   }
-  // }
+      emit(AuthDeleteSuccessededState(' deleting success'));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('deleting success'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.pushReplacementNamed(context, LoginPage.id);
+      }
+    } on FirebaseAuthException catch (e) {
+      emit(AuthDeleteFailingState(
+          e.message ?? 'An error occurred while deleting the account.'));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.message ?? 'Failed deleting account'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      emit(AuthDeleteFailingState('Something went wrong'));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Something went wrong'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
   Future<void> signOut(BuildContext context) async {
     try {
       emit(Unauthenticated());
-      Navigator.of(context).pushReplacementNamed(BottomNavPage.id);
+      Navigator.of(context).pushReplacementNamed(HomePage.id);
     } catch (e) {
       print('Errrror in LogOut $e');
+    }
+  }
+
+//   // Future<void> updateDisplayName(String name, BuildContext context) async {
+//     emit(UserNameUpdateLoading());
+//     try {
+//       var credentials = FirebaseAuth.instance.currentUser;
+//       if (credentials == null) {
+//         emit(UserNameUpdateFailed('No user logged in'));
+//       } else {
+//         await credentials.updateDisplayName(name);
+//         await credentials.reload();
+//         log('Name updated to: ${credentials.displayName}');
+//         emit(UserNameUpdateSuccess('Name updated successfully'));
+//         if (context.mounted) {
+//           ScaffoldMessenger.of(context).showSnackBar(
+//             const SnackBar(
+//               backgroundColor: Colors.green,
+//               content: Text('Name updated successfully'),
+//             ),
+//           );
+//         }
+//       }
+//     } catch (e) {
+//       emit(UserNameUpdateFailed(e.toString()));
+//       if (!context.mounted) return;
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text('Error updating name: $e')),
+//       );
+//     }
+//   }
+// //
+
+  Future<void> uploadProfilePicture(BuildContext context) async {
+    emit(UProPicUpdateLoadingState());
+
+    var imageResult = await FilePicker.platform
+        .pickFiles(type: FileType.image, withData: true);
+
+    if (imageResult != null) {
+      var storageRef = FirebaseStorage.instance
+          .ref('images/${imageResult!.files.first.name}');
+
+      var uploadResult = await storageRef.putData(
+          imageResult.files.first.bytes!,
+          SettableMetadata(
+            contentType:
+                'image/${imageResult.files.first.name.split('.').last}',
+          ));
+      if (uploadResult.state == TaskState.success) {
+        var downloadUrl = await uploadResult.ref.getDownloadURL();
+        log('Image upload $downloadUrl');
+
+        emit(UProPicUpdateSuccessState('Profile picture updated successfully'));
+      } else {
+        emit(UProPicUpdateFailedState('Failed to upload profile picture'));
+      }
     }
   }
 }

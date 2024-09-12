@@ -3,193 +3,185 @@ import 'package:edu_vista/models/course.dart';
 import 'package:edu_vista/pages/course_details_page.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CoursesWidget extends StatefulWidget {
-  final String? categoryName; // Add this property to filter by category
-  final String? rankValue;
-  final String? name;
-  final void Function()? onSeeAllClicked;
-
   const CoursesWidget({
-    this.categoryName,
     this.rankValue,
-    this.name,
-    this.onSeeAllClicked,
     super.key,
+    required this.futureCall,
   });
-
+  final String? rankValue;
+  final Future<QuerySnapshot<Map<String, dynamic>>> futureCall;
   @override
   State<CoursesWidget> createState() => _CoursesWidgetState();
 }
 
 class _CoursesWidgetState extends State<CoursesWidget> {
-  List<Course>? courses;
-  bool showAllCourses = false;
-  late Future<QuerySnapshot<Map<String, dynamic>>> futureCall;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Initialize futureCall with the appropriate type after applying conditions
-    if (widget.rankValue != null) {
-      futureCall = FirebaseFirestore.instance
-          .collection('courses')
-          .where('rank', isEqualTo: widget.rankValue)
-          .orderBy('created_date', descending: true)
-          .get();
-    } else if (widget.categoryName != null) {
-      futureCall = FirebaseFirestore.instance
-          .collection('courses')
-          .where('category', isEqualTo: widget.categoryName)
-          .orderBy('created_date', descending: true)
-          .get(); // Correct assignment with `.get()`
-    } else {
-      futureCall = FirebaseFirestore.instance
-          .collection('courses')
-          .orderBy('created_date', descending: true)
-          .get(); // Default query if no rank or category is provided
-    }
-  }
-
-  void toggleShowAllCourses() {
-    setState(() {
-      showAllCourses = !showAllCourses;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          if (widget.name != null) // Show title only if provided
-            Padding(
-              padding: const EdgeInsets.only(bottom: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    widget.name!,
-                    style: const TextStyle(
-                        fontSize: 17, fontWeight: FontWeight.w700),
-                  ),
-                  InkWell(
-                    onTap: toggleShowAllCourses,
-                    child: Text(
-                      showAllCourses ? 'Hide Courses' : 'See All',
-                      style: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ],
-              ),
+    return FutureBuilder(
+      future: widget.futureCall,
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text('Error occurred'),
+          );
+        }
+
+        if (!snapshot.hasData || (snapshot.data?.docs.isEmpty ?? false)) {
+          return const Center(
+            child: Text('No courses found'),
+          );
+        }
+
+        var courses = List<Course>.from(snapshot.data?.docs
+                .map((e) => Course.fromJson({'id': e.id, ...e.data()}))
+                .toList() ??
+            []);
+
+        return GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: .95,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 0,
             ),
-          FutureBuilder(
-              future: futureCall,
-              builder: (ctx, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return const Center(child: Text('Error occurred'));
-                }
-
-                if (!snapshot.hasData ||
-                    (snapshot.data?.docs.isEmpty ?? false)) {
-                  return const Center(child: Text('No courses found'));
-                }
-
-                var courses = snapshot.data!.docs
-                    .map((e) => Course.fromJson({'id': e.id, ...e.data()}))
-                    .toList();
-
-                if (!showAllCourses) {
-                  courses = courses.take(2).toList();
-                }
-
-                return GridView.count(
-                  mainAxisSpacing: 15,
-                  crossAxisSpacing: 15,
-                  shrinkWrap: true,
-                  crossAxisCount: 2,
-                  children: List.generate(courses.length, (index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, CourseDetailsPage.id,
-                            arguments: courses[index]);
-                      },
-                      child: Column(
+            itemCount: courses.length,
+            itemBuilder: (context, index) {
+              var rate = courses[index].rating;
+              return InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    CourseDetailsPage.id,
+                    arguments: courses[index],
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, bottom: 20),
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    children: [
+                      Container(
+                        width: 140,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              courses[index].image ?? 'No Image Found',
+                            ),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Row(
+                          children: [
+                            Text(
+                              '${rate ?? 'No rank'}',
+                              style: const TextStyle(
+                                color: ColorUtility.gray,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: List.generate(5, (starindex) {
+                                return Icon(
+                                  starindex < (courses[index].rating ?? 0)
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  color: ColorUtility.main,
+                                  size: 15,
+                                );
+                              }),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(courses[index].title ?? 'No Title',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      Row(
                         children: [
-                          Container(
-                            width: 150,
-                            height: 90,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: Colors.grey,
+                          const Icon(Icons.person_2_outlined),
+                          Text(
+                            courses[index].instructor?.name ?? 'No name',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
                             ),
-                            child: Image(
-                              image: NetworkImage(courses[index].image ?? ''),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 6),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(5, (starindex) {
-                                    return Icon(
-                                      starindex < (courses[index].rating ?? 0)
-                                          ? Icons.star
-                                          : Icons.star_border,
-                                      color: ColorUtility.main,
-                                      size: 15,
-                                    );
-                                  }),
-                                ),
-                                Text(
-                                  courses[index].title ?? 'No Name',
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.person_2_outlined),
-                                    const SizedBox(width: 5),
-                                    Text(
-                                      courses[index].instructor?.name ??
-                                          'No instructor',
-                                      style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  '\$${courses[index].price.toString()}',
-                                  style: const TextStyle(
-                                      fontSize: 17,
-                                      color: ColorUtility.main,
-                                      fontWeight: FontWeight.w800),
-                                ),
-                              ],
-                            ),
-                          ),
+                          )
                         ],
                       ),
-                    );
-                  }),
-                );
-              }),
-        ],
-      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 5,
+                            ),
+                            child: Text(
+                              '\$${courses[index].price ?? 'Not found'}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                color: ColorUtility.main,
+                              ),
+                            ),
+                          ),
+                          // BlocBuilder<CartBloc, CartState>(
+                          //   builder: (context, state) {
+                          //     return TextButton(
+                          //         onPressed: () {
+                          //           context
+                          //               .read<CartBloc>()
+                          //               .add(AddToCart(courses[index]));
+                          //           ScaffoldMessenger.of(context).showSnackBar(
+                          //             SnackBar(
+                          //               content: Text(
+                          //                   '${courses[index].title} added to cart'),
+                          //             ),
+                          //           );
+                          //         },
+                          //         child: const Text(
+                          //           'Add to cart',
+                          //           style: TextStyle(fontSize: 14),
+                          //         ));
+                          //   },
+                          // )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            });
+      },
     );
   }
 }

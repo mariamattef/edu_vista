@@ -24,6 +24,9 @@ class _LectureChipsWidgetState extends State<LectureChipsWidget> {
     return SizedBox(
       height: 60,
       child: ListView.separated(
+        separatorBuilder: (ctx, index) => const SizedBox(
+          width: 8,
+        ),
         scrollDirection: Axis.horizontal,
         itemCount: chips.length,
         itemBuilder: (ctx, index) {
@@ -37,9 +40,6 @@ class _LectureChipsWidgetState extends State<LectureChipsWidget> {
             ),
           );
         },
-        separatorBuilder: (ctx, index) => const SizedBox(
-          width: 10,
-        ),
       ),
     );
   }
@@ -48,12 +48,12 @@ class _LectureChipsWidgetState extends State<LectureChipsWidget> {
 class _ChipWidget extends StatelessWidget {
   final bool isSelected;
   final String label;
-  const _ChipWidget({required this.isSelected, required this.label, super.key});
+  const _ChipWidget({required this.isSelected, required this.label});
 
   @override
   Widget build(BuildContext context) {
     return Chip(
-      labelPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      labelPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 2),
       padding: const EdgeInsets.all(8),
       side: BorderSide.none,
       shape: const StadiumBorder(),
@@ -65,7 +65,6 @@ class _ChipWidget extends StatelessWidget {
             color: isSelected ? Colors.white : Colors.black, fontSize: 17),
       ),
       // color:
-      //     MaterialStatePropertyAll(ColorUtility.deepYellow),
     );
   }
 }

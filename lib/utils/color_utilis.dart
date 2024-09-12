@@ -10,4 +10,5 @@ class ColorUtility {
   static const gbScaffold = Color(0xffFCFCFC);
   static const buttonGray = Color(0xffE0E0E0);
   static const cardGray = Color(0xffC6D6D3);
+  static const lightBlack = Color(0xff545454);
 }
