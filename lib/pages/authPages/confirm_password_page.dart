@@ -18,8 +18,7 @@ class _ConfirmPasswrdPageState extends State<ConfirmPasswrdPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
+      body: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(
@@ -30,49 +29,43 @@ class _ConfirmPasswrdPageState extends State<ConfirmPasswrdPage> {
               style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
             ),
             const SizedBox(
-              height: 200,
+              height: 100,
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: CustomTextFormField(
-                controller: _email,
-                hintText: 'Demo@gmail.com',
-                labelText: 'Email',
-                keyboardType: TextInputType.emailAddress,
-              ),
+            CustomTextFormField(
+              controller: _email,
+              hintText: 'Demo@gmail.com',
+              labelText: 'Email',
+              keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(
               height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CustomElevatedButton(
-                      onPressed: () async {
-                        await context.read<AuthCubit>().resetPassword(
-                              context: context,
-                              emailController: _email,
-                            );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Password reset link sent to your email',
-                            ),
+            Row(
+              children: [
+                Expanded(
+                  child: CustomElevatedButton(
+                    onPressed: () async {
+                      await context.read<AuthCubit>().resetPassword(
+                            context: context,
+                            emailController: _email,
+                          );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Password reset link sent to your email',
                           ),
-                        );
-                        Navigator.pushNamed(context, ResetPasswordPage.id);
-                      },
-                      child: const Text(
-                        'SUBMIT',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w700),
-                      ),
+                        ),
+                      );
+                      Navigator.pushNamed(context, ResetPasswordPage.id);
+                    },
+                    child: const Text(
+                      'SUBMIT',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             )
           ],
         ),

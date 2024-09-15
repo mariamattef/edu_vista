@@ -1,21 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edu_vista/blocs/cart/cart_bloc.dart';
 import 'package:edu_vista/models/course.dart';
-import 'package:edu_vista/pages/card_page.dart';
-import 'package:edu_vista/pages/course_details_page.dart';
+import 'package:edu_vista/pages/cart_page/card_page.dart';
+import 'package:edu_vista/pages/generalPage/course_details_page.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:edu_vista/utils/image_utility.dart';
-import 'package:edu_vista/widgets/courses_widget.dart';
+import 'package:edu_vista/widgets/Custom_text_button.dart';
+import 'package:edu_vista/widgets/custom_elevated_button.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CoursesPage extends StatefulWidget {
-  const CoursesPage({super.key});
+class ShopItemsPage extends StatefulWidget {
+  static const id = 'ShopItemsWidget';
+  const ShopItemsPage({super.key});
 
   @override
-  State<CoursesPage> createState() => _CoursesPageState();
+  State<ShopItemsPage> createState() => _CoursesPageState();
 }
 
-class _CoursesPageState extends State<CoursesPage> {
+class _CoursesPageState extends State<ShopItemsPage> {
   bool _showAllCourses = false;
 
   @override
@@ -24,7 +28,7 @@ class _CoursesPageState extends State<CoursesPage> {
       appBar: AppBar(
         backgroundColor: ColorUtility.gbScaffold,
         title: const Text(
-          'Courses',
+          'Add To Cart',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700,
@@ -44,46 +48,19 @@ class _CoursesPageState extends State<CoursesPage> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: () {
-                    _showAllCourses = !_showAllCourses;
-                    setState(() {});
-                  },
-                  child: const Chip(
-                    label: Text('All'),
-                    backgroundColor: ColorUtility.grayExtraLight,
-                    labelStyle: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    shape: CircleBorder(
-                      side: BorderSide(color: Colors.transparent),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
           const SizedBox(
             height: 20,
           ),
           Expanded(
-            child: !_showAllCourses
-                ? Image.asset(ImageUtility.frame)
-                : Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: _courseWiget(
-                      futureCall: FirebaseFirestore.instance
-                          .collection('courses')
-                          .orderBy('created_date', descending: true)
-                          .get(),
-                    ),
-                  ),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: _courseWiget(
+                futureCall: FirebaseFirestore.instance
+                    .collection('courses')
+                    .orderBy('created_date', descending: true)
+                    .get(),
+              ),
+            ),
           ),
         ],
       ),
@@ -92,14 +69,24 @@ class _CoursesPageState extends State<CoursesPage> {
 }
 
 // ignore: unused_element
-class _courseWiget extends StatelessWidget {
+class _courseWiget extends StatefulWidget {
   final Future<QuerySnapshot<Map<String, dynamic>>> futureCall;
-  const _courseWiget({super.key, required this.futureCall});
+  bool isSelected;
+  String courseSelected;
+  _courseWiget(
+      {required this.futureCall,
+      this.isSelected = false,
+      this.courseSelected = '0'});
 
+  @override
+  State<_courseWiget> createState() => _courseWigetState();
+}
+
+class _courseWigetState extends State<_courseWiget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: futureCall,
+      future: widget.futureCall,
       builder: (ctx, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -125,16 +112,16 @@ class _courseWiget extends StatelessWidget {
             []);
 
         return GridView.builder(
-            shrinkWrap: true,
+            // shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,
-              childAspectRatio: 3,
+              childAspectRatio: 3.4,
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
             ),
             itemCount: courses.length,
             itemBuilder: (context, index) {
-              var rate = courses[index].rating;
+              // var rate = courses[index].rating;
               return InkWell(
                 onTap: () {
                   Navigator.pushNamed(
@@ -144,15 +131,15 @@ class _courseWiget extends StatelessWidget {
                   );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 0),
                   child: Wrap(
-                    // alignment: WrapAlignment.start,
+                    alignment: WrapAlignment.center,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            width: 140,
+                            width: 130,
                             height: 80,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
@@ -165,12 +152,13 @@ class _courseWiget extends StatelessWidget {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 20),
+                            padding: const EdgeInsets.only(right: 20, top: 25),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(courses[index].title ?? 'No Title',
                                     style: const TextStyle(
+                                      overflow: TextOverflow.ellipsis,
                                       fontWeight: FontWeight.w600,
                                       fontSize: 14,
                                     ),
@@ -186,9 +174,9 @@ class _courseWiget extends StatelessWidget {
                                       courses[index].instructor?.name ??
                                           'No name',
                                       style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          overflow: TextOverflow.ellipsis),
                                     )
                                   ],
                                 ),
@@ -199,42 +187,51 @@ class _courseWiget extends StatelessWidget {
                                   'Start Your Course',
                                   textAlign: TextAlign.left,
                                 ),
-                                const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 5,
-                                      ),
-                                    ),
-                                    // BlocBuilder<CartBloc, CartState>(
-                                    //   builder: (context, state) {
-                                    //     return TextButton(
-                                    //         onPressed: () {
-                                    //           context
-                                    //               .read<CartBloc>()
-                                    //               .add(AddToCart(courses[index]));
-                                    //           ScaffoldMessenger.of(context).showSnackBar(
-                                    //             SnackBar(
-                                    //               content: Text(
-                                    //                   '${courses[index].title} added to cart'),
-                                    //             ),
-                                    //           );
-                                    //         },
-                                    //         child: const Text(
-                                    //           'Add to cart',
-                                    //           style: TextStyle(fontSize: 14),
-                                    //         ));
-                                    //   },
-                                    // )
-                                  ],
-                                ),
+                                // ignore: avoid_unnecessary_containers
                               ],
                             ),
-                          )
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(
+                                  left: 0,
+                                ),
+                              ),
+                              BlocBuilder<CartBloc, CartState>(
+                                  builder: (context, state) {
+                                return IconButton(
+                                    isSelected: !widget.isSelected,
+                                    onPressed: () {
+                                      widget.isSelected != widget.isSelected;
+                                      context.read<CartBloc>().add(
+                                          AddingToCartEvent(courses[index]));
+                                      // BlocProvider.of<CartBloc>(context).add(
+                                      //     RemovingFromCartEvent(
+                                      //         courses[index]));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          backgroundColor:
+                                              ColorUtility.deepYellow,
+                                          content: Text(
+                                              '${courses[index].title} added to cart'),
+                                        ),
+                                      );
+                                    },
+                                    icon: widget.isSelected
+                                        ? const Text('AddToCart')
+                                        : const Icon(
+                                            Icons.shopping_cart_checkout,
+                                            color: ColorUtility.deepYellow,
+                                            size: 30,
+                                          ));
+                              })
+                            ],
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),

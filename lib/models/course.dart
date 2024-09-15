@@ -16,7 +16,7 @@ class Course {
   int? total_hours;
   DateTime? created_date;
 
-  Course.fromJson(Map<String, dynamic> data) {
+  Course.fromJson(Map data) {
     id = data['id'];
     title = data['title'];
     image = data['image'];

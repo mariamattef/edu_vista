@@ -1,11 +1,9 @@
-import 'dart:nativewrappers/_internal/vm/lib/developer.dart';
-
 import 'package:edu_vista/pages/authPages/login_page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:edu_vista/pages/home_page.dart';
+import 'package:edu_vista/pages/generalPage/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -123,6 +121,18 @@ class AuthCubit extends Cubit<AuthState> {
           content: Text('Sign up Exception $e'),
         ),
       );
+    }
+  }
+
+  Future<void> userLoginOrNot() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool? firstLogin = prefs.getBool('first_login');
+
+    if (firstLogin == null || firstLogin == true) {
+      emit(NewUser());
+      await prefs.setBool('first_login', false);
+    } else {
+      emit(OldUser());
     }
   }
 
@@ -308,7 +318,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     if (imageResult != null) {
       var storageRef = FirebaseStorage.instance
-          .ref('images/${imageResult!.files.first.name}');
+          .ref('images/${imageResult.files.first.name}');
 
       var uploadResult = await storageRef.putData(
           imageResult.files.first.bytes!,
@@ -318,12 +328,42 @@ class AuthCubit extends Cubit<AuthState> {
           ));
       if (uploadResult.state == TaskState.success) {
         var downloadUrl = await uploadResult.ref.getDownloadURL();
-        log('Image upload $downloadUrl');
-
+        print('Image upload $downloadUrl');
         emit(UProPicUpdateSuccessState('Profile picture updated successfully'));
       } else {
         emit(UProPicUpdateFailedState('Failed to upload profile picture'));
       }
+    }
+  }
+
+  Future<void> logout(BuildContext context) async {
+    emit(AuthLoading());
+    try {
+      await FirebaseAuth.instance.signOut();
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+
+      emit(AuthLogoutSuccess('Logged out'));
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Logged Out'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.pushReplacementNamed(context, LoginPage.id);
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to log out : $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      emit(AuthLogoutFailed('Logout failed: $e'));
     }
   }
 }

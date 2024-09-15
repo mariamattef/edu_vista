@@ -1,9 +1,10 @@
-import 'package:edu_vista/pages/Course_Page.dart';
+import 'package:edu_vista/pages/generalPage/Course_Page.dart';
 import 'package:edu_vista/pages/chatPages/chat_page.dart';
 import 'package:edu_vista/pages/profilePages/profile_page.dart';
-import 'package:edu_vista/pages/search_page.dart';
+import 'package:edu_vista/pages/generalPage/search_page.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:edu_vista/widgets/home_services.widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       case 3:
         return const ChatsPage();
       case 4:
-        return const ProfilePage();
+        return ProfilePage();
       default:
         return HomeServiceWidget();
     }
@@ -43,7 +44,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: ColorUtility.gbScaffold,
         selectedItemColor: ColorUtility.deepYellow,
-        unselectedItemColor: Color(0xff1D1B20),
+        unselectedItemColor: const Color(0xff1D1B20),
         iconSize: 30,
         showSelectedLabels: false,
         showUnselectedLabels: false,
@@ -53,28 +54,32 @@ class _HomePageState extends State<HomePage> {
           _currentIndex = index;
           setState(() {});
         },
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.import_contacts),
             label: 'Menu',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.search_outlined),
             label: 'Search',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.chat),
             label: 'Chat',
           ),
 
           BottomNavigationBarItem(
               icon: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGKbfv6axBJugPvg8wk8MbIg00xks4soLvLa4d4dNIgw-jPdT7z1RV_HX1kpyt0_oDO1g&usqp=CAU"),
+                backgroundImage: FirebaseAuth.instance.currentUser?.photoURL !=
+                            null &&
+                        FirebaseAuth.instance.currentUser!.photoURL!.isNotEmpty
+                    ? NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!)
+                    : const NetworkImage(
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAk0_WV-nb1sB6OuvVJ1gdmpxWzxU5GfGjng&s'),
               ),
               label: 'Profile'),
 

@@ -51,7 +51,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
-                height: 200,
+                height: 100,
               ),
               Form(
                   child: Padding(

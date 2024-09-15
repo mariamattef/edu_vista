@@ -8,10 +8,12 @@ class ExpansionTileWidget extends StatefulWidget {
     this.course,
     required this.titleTile,
     required this.body,
+    this.Icons,
   });
   final Course? course;
   final String titleTile;
   final List<Widget> body;
+  final Icons;
 
   @override
   State<ExpansionTileWidget> createState() => _ExpansionTileWidgetState();
@@ -43,12 +45,12 @@ class _ExpansionTileWidgetState extends State<ExpansionTileWidget> {
         ),
       ),
       trailing: Icon(
-        isExpanded
-            ? Icons.keyboard_double_arrow_down_outlined
-            : Icons.double_arrow_outlined,
+        isExpanded ? widget.Icons : widget.Icons,
       ),
-      childrenPadding: const EdgeInsets.all(20),
+      childrenPadding: const EdgeInsets.all(10),
       children: widget.body,
     );
   }
 }
+//      ? Icons.keyboard_double_arrow_down_outlined
+//             : Icons.double_arrow_outlined,

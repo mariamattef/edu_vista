@@ -1,9 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
+import 'package:edu_vista/widgets/custom_text_form_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class EditProfilePage extends StatelessWidget {
+class EditProfilePage extends StatefulWidget {
   static const id = 'EditProfilePage';
   const EditProfilePage({super.key});
+
+  @override
+  State<EditProfilePage> createState() => _EditProfilePageState();
+}
+
+class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,7 +20,7 @@ class EditProfilePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
-          "Sign up",
+          "Edit Profile",
           style: TextStyle(color: Color(0xFF757575)),
         ),
       ),
@@ -19,7 +28,7 @@ class EditProfilePage extends StatelessWidget {
         child: SizedBox(
           width: double.infinity,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -62,20 +71,63 @@ class EditProfilePage extends StatelessWidget {
 
 const authOutlineInputBorder = OutlineInputBorder(
   borderSide: BorderSide(color: Color(0xFF757575)),
-  borderRadius: BorderRadius.all(Radius.circular(10)),
+  borderRadius: BorderRadius.all(Radius.circular(6)),
 );
 
-class ComplateProfileForm extends StatelessWidget {
+class ComplateProfileForm extends StatefulWidget {
   const ComplateProfileForm({super.key});
+
+  @override
+  State<ComplateProfileForm> createState() => _ComplateProfileFormState();
+}
+
+class _ComplateProfileFormState extends State<ComplateProfileForm> {
+  var formKey = GlobalKey<FormState>();
+  final user = FirebaseAuth.instance.currentUser;
+  TextEditingController? _nameController;
+  TextEditingController? _phoneController;
+  TextEditingController? _addressController;
+  @override
+  void initState() {
+    setInitiData();
+    super.initState();
+  }
+
+  void setInitiData() {
+    _nameController = TextEditingController(text: user?.displayName ?? '');
+    _phoneController =
+        TextEditingController(text: _phoneController?.text ?? '');
+    _addressController =
+        TextEditingController(text: _addressController?.text ?? '');
+    setState(() {});
+  }
+
+  Future<void> insertUserData() async {
+    final userData = {
+      'name': _nameController?.text ?? '',
+      'phone': _phoneController?.text ?? '',
+      'address': _addressController?.text ?? '',
+    };
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .set(userData);
+  }
+
+  @override
+  void dispose() {
+    _nameController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: formKey,
       child: Column(
         children: [
           TextFormField(
-            onSaved: (name) {},
-            onChanged: (name) {},
+            controller: _nameController,
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
                 hintText: "Enter your  name",
@@ -90,14 +142,13 @@ class ComplateProfileForm extends StatelessWidget {
                 border: authOutlineInputBorder,
                 enabledBorder: authOutlineInputBorder,
                 focusedBorder: authOutlineInputBorder.copyWith(
-                    borderSide: const BorderSide(color: Color(0xFFFF7643)))),
+                    borderSide: const BorderSide(color: ColorUtility.main))),
           ),
           const SizedBox(
             height: 20,
           ),
           TextFormField(
-            onSaved: (password) {},
-            onChanged: (password) {},
+            controller: _phoneController,
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
                 hintText: "Enter your phone number",
@@ -112,13 +163,12 @@ class ComplateProfileForm extends StatelessWidget {
                 border: authOutlineInputBorder,
                 enabledBorder: authOutlineInputBorder,
                 focusedBorder: authOutlineInputBorder.copyWith(
-                    borderSide: const BorderSide(color: Color(0xFFFF7643)))),
+                    borderSide: const BorderSide(color: ColorUtility.main))),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: TextFormField(
-              onSaved: (address) {},
-              onChanged: (address) {},
+              controller: _addressController,
               decoration: InputDecoration(
                   hintText: "Enter your address",
                   labelText: "Address",
@@ -132,20 +182,22 @@ class ComplateProfileForm extends StatelessWidget {
                   border: authOutlineInputBorder,
                   enabledBorder: authOutlineInputBorder,
                   focusedBorder: authOutlineInputBorder.copyWith(
-                      borderSide:
-                          const BorderSide(color: ColorUtility.deepYellow))),
+                      borderSide: const BorderSide(color: ColorUtility.main))),
             ),
           ),
           const SizedBox(height: 8),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              insertUserData();
+              Navigator.pop(context);
+            },
             style: ElevatedButton.styleFrom(
               elevation: 0,
               backgroundColor: ColorUtility.deepYellow,
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 48),
               shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
             ),
             child: const Text("Continue"),

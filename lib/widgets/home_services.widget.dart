@@ -1,14 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edu_vista/cubit/auth_cubit.dart';
 import 'package:edu_vista/models/course.dart';
-import 'package:edu_vista/pages/all_categories_page.dart';
-import 'package:edu_vista/pages/card_page.dart';
-import 'package:edu_vista/pages/category_course_page.dart';
+import 'package:edu_vista/pages/cart_page/shop_items_page.dart';
+import 'package:edu_vista/pages/generalPage/all_categories_page.dart';
+import 'package:edu_vista/pages/cart_page/card_page.dart';
+import 'package:edu_vista/pages/generalPage/category_course_page.dart';
+import 'package:edu_vista/pages/generalPage/payment_page.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:edu_vista/widgets/widdgits/categories_widget.dart';
 import 'package:edu_vista/widgets/courses_widget.dart';
 import 'package:edu_vista/widgets/label_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeServiceWidget extends StatefulWidget {
   List<Course>? courses;
@@ -32,6 +36,7 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
     // if (!showAllCourses) {
     //   widget.courses = widget.courses?.take(2).toList();
     // }
+    context.read<AuthCubit>().userLoginOrNot();
     super.initState();
   }
 
@@ -39,28 +44,48 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: RichText(
-          text: TextSpan(
-            children: [
-              const TextSpan(
-                text: 'Welcome Back!  ',
-                style: TextStyle(color: Colors.black, fontSize: 20),
-              ),
-              TextSpan(
-                text: '${FirebaseAuth.instance.currentUser?.displayName}',
-                style: const TextStyle(
-                    color: ColorUtility.main,
-                    fontSize: 25,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'PlusJakartaSans'), // Set color to yellow
-              ),
-            ],
-          ),
+        title: Row(
+          children: [
+            BlocBuilder<AuthCubit, AuthState>(
+              builder: (context, State) {
+                if (State is NewUser) {
+                  return const Text(
+                    'Welcome',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  );
+                } else if (State is OldUser) {
+                  return const Text(
+                    'Welcome Back',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Text(
+              FirebaseAuth.instance.currentUser?.displayName?.toUpperCase() ??
+                  'User'.toUpperCase(),
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: ColorUtility.main),
+            ),
+          ],
         ),
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, CartPage.id);
+              Navigator.pushNamed(context, ShopItemsPage.id);
             },
             icon: const Icon(
               Icons.shopping_cart_outlined,
@@ -69,6 +94,9 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
           ),
         ],
       ),
+      // floatingActionButton: FloatingActionButton(onPressed: () {
+      //   Navigator.pushNamed(context, PaymentPage.id);
+      // }),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -81,7 +109,7 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
                     Navigator.pushNamed(context, AllCategoryPage.id);
                   },
                 ),
-                const CategoriesWidget(),
+                CategoriesWidget(),
                 const SizedBox(
                   height: 20,
                 ),
@@ -123,123 +151,3 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
     );
   }
 }
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:edu_vista/pages/card_page.dart';
-// import 'package:edu_vista/pages/test2_page.dart';
-// import 'package:edu_vista/utils/color_utilis.dart';
-// import 'package:edu_vista/widgets/categories_widget.dart';
-// import 'package:edu_vista/widgets/courses_widget.dart';
-
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-
-// class HomePage extends StatefulWidget {
-//   static const String id = 'home';
-//   const HomePage({super.key});
-
-//   @override
-//   State<HomePage> createState() => _HomePageState();
-// }
-
-// class _HomePageState extends State<HomePage> {
-//   String? rankValue;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       // bottomNavigationBar: BottomNavigationBarExample(),
-//       appBar: AppBar(
-//         title: RichText(
-//           text: TextSpan(
-//             children: [
-//               const TextSpan(
-//                 text: 'Welcome Back!  ',
-//                 style: TextStyle(color: Colors.black, fontSize: 20),
-//               ),
-//               TextSpan(
-//                 text: '${FirebaseAuth.instance.currentUser?.displayName}',
-//                 style: const TextStyle(
-//                     color: ColorUtility.main,
-//                     fontSize: 25,
-//                     fontWeight: FontWeight.w700,
-//                     fontFamily: 'PlusJakartaSans'), // Set color to yellow
-//               ),
-//             ],
-//           ),
-//         ),
-//         actions: [
-//           IconButton(
-//             onPressed: () {
-//               Navigator.pushNamed(context, CartPage.id);
-//             },
-//             icon: const Icon(
-//               Icons.shopping_cart_outlined,
-//               size: 30,
-//             ),
-//           ),
-//         ],
-//       ),
-
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () {
-//           Navigator.pushNamed(context, CategoryExpansionPanelPage.id);
-//         },
-//         backgroundColor: ColorUtility.main,
-//         child: const Icon(Icons.search),
-//       ),
-
-//       body: SafeArea(
-//         child: Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: Column(
-//             children: [
-//               CategoriesWidget(),
-//               Expanded(
-//                 child: ListView(children: [
-//                   const SizedBox(
-//                     height: 20,
-//                   ),
-//                   const SizedBox(
-//                     height: 20,
-//                   ),
-//                   const CoursesWidget(
-//                     name: 'Students Also Search for',
-//                     rankValue: '',
-//                     futureCall: null,
-//                   ),
-//                   SizedBox(
-//                     height: 20,
-//                   ),
-//                   CoursesWidget(
-//                       name: 'Top Rated Courses',
-//                       rankValue: 'top rated',
-//                       futureCall: FirebaseFirestore.instance
-//                           .collection('courses')
-//                           .where('rank', isEqualTo: widget.rankValue)
-//                           .orderBy('created_date', descending: true)
-//                           .get()),
-//                   const SizedBox(
-//                     height: 20,
-//                   ),
-//                   // SizedBox(
-//                   //   height: 20,
-//                   // ),
-//                   CoursesWidget(
-//                     futureCall: FirebaseFirestore.instance
-//                         .collection('courses')
-//                         .where('rank', isEqualTo: 'top seller')
-//                         .orderBy('created_date', descending: true)
-//                         .get(),
-//                     name: 'Top Seller Courses',
-//                     rankValue: 'top seller',
-//                   ),
-//                 ]),
-//               ),
-//               // TabBarExample()
-//             ],
-//           ),
-//         ),
-//       ),
-//       // bottomNavigationBar: BottomNavPage(),
-//     );
-//   }
-// }

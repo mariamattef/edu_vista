@@ -8,6 +8,7 @@ class CustomTextFormField extends StatelessWidget {
   void Function(String)? onChanged;
   String? Function(String?)? validator;
   bool? obscureText;
+  Widget? suffix;
 
   CustomTextFormField(
       {required this.hintText,
@@ -17,6 +18,7 @@ class CustomTextFormField extends StatelessWidget {
       this.onChanged,
       this.validator,
       this.obscureText,
+      this.suffix,
       super.key});
 
   @override

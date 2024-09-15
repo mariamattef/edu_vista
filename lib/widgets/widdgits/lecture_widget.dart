@@ -1,12 +1,16 @@
+import 'package:edu_vista/models/course.dart';
 import 'package:edu_vista/models/lecture.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:flutter/material.dart';
 
 class LectureWidget extends StatefulWidget {
-  const LectureWidget(
-      {super.key, this.lectures, required this.onLectureChosen});
+  const LectureWidget({super.key, this.lectures, required this.onLectureChosen
+
+      // , this.course
+      });
   final List<Lecture>? lectures;
   final void Function(Lecture) onLectureChosen;
+  // final Course? course;
 
   @override
   State<LectureWidget> createState() => _LectureWidgetState();
@@ -17,6 +21,13 @@ class _LectureWidgetState extends State<LectureWidget> {
   Lecture? selectedLecture;
   @override
   Widget build(BuildContext context) {
+    // print(widget.course?.id); /////// Nul
+    //////////
+    ///////////
+    //////
+    ///😥😥😏
+    //////////////////
+    //////////////
     if (isLoading) {
       return const Center(
         child: CircularProgressIndicator(),

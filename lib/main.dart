@@ -1,28 +1,33 @@
+import 'dart:math';
+
+import 'package:edu_vista/blocs/cart/cart_bloc.dart';
 import 'package:edu_vista/blocs/course/course_bloc.dart';
 import 'package:edu_vista/blocs/lecture/lecture_bloc.dart';
 import 'package:edu_vista/cubit/auth_cubit.dart';
 import 'package:edu_vista/firebase_options.dart';
-import 'package:edu_vista/pages/all_categories_page.dart';
-import 'package:edu_vista/pages/category_course_page.dart';
+import 'package:edu_vista/pages/cart_page/shop_items_page.dart';
+import 'package:edu_vista/pages/generalPage/all_categories_page.dart';
+import 'package:edu_vista/pages/generalPage/category_course_page.dart';
 import 'package:edu_vista/pages/chatPages/calls_search_page.dart';
-import 'package:edu_vista/pages/card_page.dart';
-import 'package:edu_vista/pages/categories_page.dart';
+import 'package:edu_vista/pages/cart_page/card_page.dart';
 import 'package:edu_vista/pages/chatPages/chat_page.dart';
 import 'package:edu_vista/pages/chatPages/contacts_page.dart';
+import 'package:edu_vista/pages/generalPage/payment_page.dart';
+import 'package:edu_vista/pages/profilePages/about_us_page.dart';
 import 'package:edu_vista/pages/profilePages/edit_profile_page.dart';
 import 'package:edu_vista/pages/chatPages/message_page.dart';
 import 'package:edu_vista/pages/profilePages/profile_page.dart';
 import 'package:edu_vista/pages/chatPages/search_chat_page.dart';
 import 'package:edu_vista/pages/profilePages/settings_profile_page.dart';
 import 'package:edu_vista/pages/authPages/reset_password_page.dart';
-import 'package:edu_vista/pages/course_details_page.dart';
-import 'package:edu_vista/pages/home_page.dart';
+import 'package:edu_vista/pages/generalPage/course_details_page.dart';
+import 'package:edu_vista/pages/generalPage/home_page.dart';
 import 'package:edu_vista/pages/authPages/login_page.dart';
 import 'package:edu_vista/pages/authPages/onboarding_page.dart';
 import 'package:edu_vista/pages/authPages/confirm_password_page.dart';
 import 'package:edu_vista/pages/authPages/signup_page.dart';
 import 'package:edu_vista/pages/authPages/splash_page.dart';
-import 'package:edu_vista/pages/search_page.dart';
+import 'package:edu_vista/pages/generalPage/search_page.dart';
 import 'package:edu_vista/services/pref.service.dart';
 import 'package:edu_vista/services/storage.services.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
@@ -45,13 +50,10 @@ void main() async {
   FirebaseSrorageReference.init();
   runApp(MultiBlocProvider(
     providers: [
-      BlocProvider(
-        create: (context) => AuthCubit(),
-      ),
-      BlocProvider(
-        create: (ctx) => CourseBloc(),
-      ),
+      BlocProvider(create: (context) => AuthCubit()),
+      BlocProvider(create: (ctx) => CourseBloc()),
       BlocProvider(create: (ctx) => LectureBloc()),
+      BlocProvider(create: (ctx) => CartBloc()),
     ],
     child: const MyApp(),
   ));
@@ -115,8 +117,7 @@ class MyApp extends StatelessWidget {
           //   return MaterialPageRoute(
           //       builder: (context) => const CategoriesPage());
           case AllCategoryPage.id:
-            return MaterialPageRoute(
-                builder: (context) => const AllCategoryPage());
+            return MaterialPageRoute(builder: (context) => AllCategoryPage());
           // case AllCoursesPage.id:
           //   if (data is String) {
           //     return MaterialPageRoute(
@@ -129,7 +130,7 @@ class MyApp extends StatelessWidget {
           //   }
 
           case ProfilePage.id:
-            return MaterialPageRoute(builder: (context) => const ProfilePage());
+            return MaterialPageRoute(builder: (context) => ProfilePage());
 
           case CartPage.id:
             return MaterialPageRoute(builder: (context) => const CartPage());
@@ -138,13 +139,15 @@ class MyApp extends StatelessWidget {
                 builder: (context) => CategoryCoursesPage(
                       categoryName: data,
                     ));
-
           case EditProfilePage.id:
             return MaterialPageRoute(
                 builder: (context) => const EditProfilePage());
+          case AboutUsPage.id:
+            return MaterialPageRoute(builder: (context) => const AboutUsPage());
           case SettingsProfilePage.id:
             return MaterialPageRoute(
                 builder: (context) => const SettingsProfilePage());
+
           case ChatsPage.id:
             return MaterialPageRoute(builder: (context) => const ChatsPage());
           case CallsSearchPage.id:
@@ -160,8 +163,14 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
                 builder: (context) => ContactSearchChatPage());
 
+          case ShopItemsPage.id:
+            return MaterialPageRoute(
+                builder: (context) => const ShopItemsPage());
+
           case SearchPage.id:
             return MaterialPageRoute(builder: (context) => const SearchPage());
+          case PaymentPage.id:
+            return MaterialPageRoute(builder: (context) => PaymentPage());
 
           default:
             return MaterialPageRoute(builder: (context) => const SplashPage());

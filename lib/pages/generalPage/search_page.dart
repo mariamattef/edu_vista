@@ -1,4 +1,5 @@
-import 'package:edu_vista/pages/card_page.dart';
+import 'package:edu_vista/pages/cart_page/card_page.dart';
+import 'package:edu_vista/pages/cart_page/shop_items_page.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:edu_vista/widgets/widdgits/categories_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,18 +18,18 @@ class SearchPage extends StatelessWidget {
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, CartPage.id);
+                Navigator.pushNamed(context, ShopItemsPage.id);
               },
               icon: const Icon(Icons.shopping_cart_outlined),
             ),
           )
         ],
       ),
-      body: const Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(15.0),
             child: Text(
               'Trending',
@@ -38,17 +39,17 @@ class SearchPage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           CategoriesWidget(),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(15.0),
             child: Text(
-              'Because you viewed',
+              'Based on your Search',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,

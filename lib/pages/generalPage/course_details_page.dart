@@ -3,6 +3,7 @@ import 'package:edu_vista/blocs/course/course_bloc.dart';
 import 'package:edu_vista/blocs/lecture/lecture_bloc.dart';
 import 'package:edu_vista/models/course.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
+
 import 'package:edu_vista/widgets/video_box_widget.dart';
 import 'package:edu_vista/widgets/widdgits/course_options_widget.dart';
 import 'package:edu_vista/widgets/widdgits/lecture_chips.dart';
@@ -51,12 +52,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
     return Scaffold(
         body: Stack(
       children: [
-        // video bloc
         BlocBuilder<LectureBloc, LectureState>(builder: (ctx, state) {
           var stateEx = state is LectureChosenState ? state : null;
-          print('>>>>>>>>>>>>>>>>>>>$stateEx');
 
-          ///nul
           if (stateEx == null) {
             return const SizedBox.shrink();
           }
@@ -172,28 +170,11 @@ class __BodyWidgetState extends State<_BodyWidget> {
                     ? CourseOptionsWidgets(
                         course: context.read<CourseBloc>().course!,
                         courseOption: state.courseOption,
-                        onLectureChosen: (lecture) async {
-                          try {
-                            FirebaseFirestore.instance
-                                .collection('course_user_progress')
-                                .doc(FirebaseAuth.instance.currentUser!.uid)
-                                .update({
-                              context.read<CourseBloc>().course!.id!:
-                                  FieldValue.increment(1)
-                            });
-                          } catch (e) {
-                            FirebaseFirestore.instance
-                                .collection('course_user_progress')
-                                .doc(FirebaseAuth.instance.currentUser!.uid)
-                                .set({
-                              context.read<CourseBloc>().course!.id!: 1
-                            });
-                          }
+                        onLectureChosen: (lecture) {
                           context
                               .read<LectureBloc>()
                               .add(LectureChosenEvent(lecture));
-                        },
-                      )
+                        })
                     : const SizedBox.shrink())
           ],
         );

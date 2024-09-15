@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:flutter/material.dart';
-import '../widgets/courses_widget.dart';
+import '../../widgets/courses_widget.dart';
 
 class CategoryCoursesPage extends StatelessWidget {
   const CategoryCoursesPage({

@@ -1,68 +1,81 @@
+import 'package:edu_vista/cubit/auth_cubit.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfilePicWidget extends StatelessWidget {
-  const ProfilePicWidget({super.key});
-
+  ProfilePicWidget({super.key});
+  final User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 115,
-      width: 115,
-      child: Stack(
-        fit: StackFit.expand,
-        clipBehavior: Clip.none,
-        children: [
-          const CircleAvatar(
-            backgroundImage: NetworkImage(
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGKbfv6axBJugPvg8wk8MbIg00xks4soLvLa4d4dNIgw-jPdT7z1RV_HX1kpyt0_oDO1g&usqp=CAU"),
-          ),
-          Positioned(
-            top: 120,
-            left: 5,
-            child: Column(
-              children: [
-                Text(
-                  '${FirebaseAuth.instance.currentUser?.displayName}',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-                ),
-                Text(
-                  '${FirebaseAuth.instance.currentUser?.email}',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            right: -12,
-            bottom: 0,
-            child: SizedBox(
-              height: 44,
-              width: 44,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  alignment: Alignment.topCenter,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Colors.black),
+    return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+      var proPictureUrl = user?.photoURL;
+      if (state is UProPicUpdateLoadingState) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      if (state is UProPicUpdateSuccessState) {
+        proPictureUrl = state.downloadUrl;
+      }
+      return SizedBox(
+        height: 114,
+        width: 114,
+        child: Stack(
+          fit: StackFit.expand,
+          clipBehavior: Clip.none,
+          children: [
+            CircleAvatar(
+                backgroundImage:
+                    proPictureUrl != null && proPictureUrl.isNotEmpty
+                        ? NetworkImage(proPictureUrl) as ImageProvider
+                        : const AssetImage('assets/images/Personal_photo.png')),
+            Positioned(
+              top: 120,
+              left: 5,
+              child: Column(
+                children: [
+                  Text(
+                    user?.displayName ?? 'No Name',
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.w600),
                   ),
-                  backgroundColor: const Color(0xFFF5F6F9),
-                ),
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 5),
-                  child: Icon(
-                    Icons.photo_camera_back,
-                    color: Colors.grey,
-                    size: 33,
+                  Text(
+                    user?.email ?? 'No email',
+                    style: const TextStyle(
+                        fontSize: 13, fontWeight: FontWeight.w700),
                   ),
-                ),
+                ],
               ),
             ),
-          )
-        ],
-      ),
-    );
+            Positioned(
+              right: -20,
+              bottom: 10,
+              child: IconButton(
+                style: TextButton.styleFrom(
+                    alignment: Alignment.topCenter,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: const BorderSide(color: Colors.black),
+                    ),
+                    backgroundColor: const Color(0xFFF5F6F9),
+                    fixedSize: Size(25, 25)),
+                onPressed: () async {
+                  await context.read<AuthCubit>().uploadProfilePicture(context);
+                  print('>>>>>>>>$proPictureUrl');
+                },
+                icon: Icon(
+                  Icons.photo_camera_back,
+                  color: Colors.grey,
+                  size: 33,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 }

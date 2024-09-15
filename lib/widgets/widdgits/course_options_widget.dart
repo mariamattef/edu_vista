@@ -42,14 +42,16 @@ class _CourseOptionsWidgetsState extends State<CourseOptionsWidgets> {
   }
 
   void init() async {
-    setState(() {
-      isLoading = true;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        isLoading = true;
+      });
     });
 
-    await Future.delayed(const Duration(milliseconds: 1200), () async {});
+    await Future.delayed(const Duration(microseconds: 1200), () async {});
     if (!mounted) return;
     lectures = await context.read<CourseBloc>().getLectures();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       setState(() {
         isLoading = false;
       });
@@ -77,6 +79,7 @@ class _CourseOptionsWidgetsState extends State<CourseOptionsWidgets> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.course.id);
     switch (widget.courseOption) {
       case CourseOptions.Lecture:
         return LectureWidget(
@@ -97,7 +100,7 @@ class _CourseOptionsWidgetsState extends State<CourseOptionsWidgets> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           getCertificatetion(context, widget.course);
         });
-        return const SizedBox.shrink();
+      // return const SizedBox.shrink();
 
       case CourseOptions.More:
         MoreWidget(

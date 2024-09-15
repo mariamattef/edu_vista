@@ -100,7 +100,8 @@ class CertificateWidget extends StatelessWidget {
               const Text(
                 'Virginia M. Patterso',
                 style: TextStyle(
-                  fontFamily: 'Helena Johnsmith',
+                  ///ToDo ////////////////////////////// font not apeard
+                  fontFamily: 'PlaywriteCU-Regular',
                   fontSize: 17.35,
                   color: ColorUtility.deepYellow,
                   fontWeight: FontWeight.w400,

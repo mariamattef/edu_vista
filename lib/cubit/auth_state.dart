@@ -29,6 +29,11 @@ final class LoginFailed extends LoginState {
 
 final class Unauthenticated extends LoginState {}
 
+/// user Login or Not before
+class NewUser extends AuthState {}
+
+class OldUser extends AuthState {}
+
 // Rest Pssword state
 final class resetPasswordStete extends AuthState {}
 
@@ -42,6 +47,7 @@ final class resetPasswordFailedStete extends resetPasswordStete {
   resetPasswordFailedStete(this.error);
 }
 
+/// Delete
 class AuthDeleteLoadingState extends AuthState {}
 
 class AuthDeleteSuccessededState extends AuthState {
@@ -56,6 +62,7 @@ class AuthDeleteFailingState extends AuthState {
   AuthDeleteFailingState(this.error);
 }
 
+///Upload
 class UProPicUpdateLoadingState extends AuthState {}
 
 class UProPicUpdateSuccessState extends AuthState {
@@ -69,4 +76,19 @@ class UProPicUpdateFailedState extends AuthState {
   final String error;
 
   UProPicUpdateFailedState(this.error);
+}
+
+////LogOut
+class AuthLoading extends AuthState {}
+
+class AuthLogoutSuccess extends AuthState {
+  final String message;
+
+  AuthLogoutSuccess(this.message);
+}
+
+class AuthLogoutFailed extends AuthState {
+  final String error;
+
+  AuthLogoutFailed(this.error);
 }

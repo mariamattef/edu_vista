@@ -1,11 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_vista/models/category.dart';
-import 'package:edu_vista/pages/category_course_page.dart';
+import 'package:edu_vista/pages/generalPage/category_course_page.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesWidget extends StatefulWidget {
-  const CategoriesWidget({super.key});
+  Axis? scrollDirection;
+  double? height;
+  double? heightEx;
+  CategoriesWidget(
+      {super.key,
+      this.scrollDirection = Axis.horizontal,
+      this.height = 40,
+      this.heightEx = 0});
 
   @override
   State<CategoriesWidget> createState() => _CategoriesWidgetState();
@@ -15,7 +22,7 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      height: widget.height ?? 40,
       child: FutureBuilder(
         future: FirebaseFirestore.instance.collection('categories').get(),
         builder: (ctx, snapshot) {
@@ -48,10 +55,11 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
               // controller: ScrollController(),
               // shrinkWrap: false,
               // physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.horizontal,
+              scrollDirection: widget.scrollDirection ?? Axis.horizontal,
               itemCount: categories.length,
-              separatorBuilder: (context, index) => const SizedBox(
+              separatorBuilder: (context, index) => SizedBox(
                 width: 10,
+                height: widget.heightEx ?? 0,
               ),
               itemBuilder: (context, index) => InkWell(
                 onTap: () {
