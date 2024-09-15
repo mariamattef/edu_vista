@@ -58,15 +58,6 @@ class _CourseOptionsWidgetsState extends State<CourseOptionsWidgets> {
     });
   }
 
-  void getCertificatetion(context, Course course) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CertificateWidget(course: course);
-      },
-    );
-  }
-
   Future<void> launchURL(String url) async {
     final Uri uri = Uri.parse(url);
 
@@ -82,34 +73,20 @@ class _CourseOptionsWidgetsState extends State<CourseOptionsWidgets> {
     print(widget.course.id);
     switch (widget.courseOption) {
       case CourseOptions.Lecture:
-        return LectureWidget(
-            lectures: lectures,
-            onLectureChosen: (Lecture) {
-              widget.lectures;
-            });
-
+        return LectureWidget(lectures: lectures, onLectureChosen: widget.onLectureChosen);
       case CourseOptions.Download:
-        return DownloadWidget(
-          lectures: lectures,
-          onLectureChosen: (Lecture) {
-            widget.lectures;
-          },
-        );
+        return DownloadWidget(lectures: lectures, onLectureChosen: widget.onLectureChosen);
 
       case CourseOptions.Certificate:
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          getCertificatetion(context, widget.course);
-        });
-      // return const SizedBox.shrink();
+        return CertificateWidget(course: widget.course);
 
       case CourseOptions.More:
-        MoreWidget(
+        return MoreWidget(
           course: widget.course,
         );
 
       default:
         return Text('Invalid option ${widget.courseOption.name}');
     }
-    return const SizedBox.shrink();
   }
 }

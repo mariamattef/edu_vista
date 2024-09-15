@@ -7,10 +7,12 @@ class ProfileMenu extends StatelessWidget {
     Key? key,
     required this.text,
     this.press,
+    required this.iconData,
   }) : super(key: key);
 
   final String text;
   final VoidCallback? press;
+  final IconData iconData;
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +27,11 @@ class ProfileMenu extends StatelessWidget {
         ),
         onPressed: press,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SvgPicture.asset(
-              'assets/icons/Settings.svg',
-              colorFilter:
-                  const ColorFilter.mode(Color(0xFFFF7643), BlendMode.srcIn),
-              width: 0,
+            const SizedBox(width: 10),
+            Icon(
+              iconData,
+              color: Colors.black,
             ),
             const SizedBox(width: 20),
             Expanded(

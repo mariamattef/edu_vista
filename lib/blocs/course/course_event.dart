@@ -9,6 +9,8 @@ class CourseFetchEvent extends CourseEvent {
   CourseFetchEvent(this.course);
 }
 
+class CourseEventInitial extends CourseEvent {}
+
 class CourseOptionChosenEvent extends CourseEvent {
   final CourseOptions courseOptions;
 

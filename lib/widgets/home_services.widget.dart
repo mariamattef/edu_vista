@@ -23,21 +23,38 @@ class HomeServiceWidget extends StatefulWidget {
 }
 
 class _HomeServiceWidgetState extends State<HomeServiceWidget> {
-  bool showAllCourses = false;
-  void toggleShowAllCourses() {
+  bool showAllTopRated = false;
+  bool showAllTopSeller = false;
+
+  void toggleShowAllTopRated() {
     setState(() {
-      showAllCourses = !showAllCourses;
+      showAllTopRated = !showAllTopRated;
     });
   }
 
+  void toggleShowAllTopSeller() {
+    setState(() {
+      showAllTopSeller = !showAllTopSeller;
+    });
+  }
+
+  int count = 0;
+
   @override
   void initState() {
+    super.initState();
     // context.read<AuthCubit>().checkUserStatus();
     // if (!showAllCourses) {
     //   widget.courses = widget.courses?.take(2).toList();
     // }
     context.read<AuthCubit>().userLoginOrNot();
-    super.initState();
+    init();
+  }
+
+  Future<void> init() async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      count = await context.read<AuthCubit>().getCollectionCount('courses');
+    });
   }
 
   @override
@@ -73,12 +90,8 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
               width: 5,
             ),
             Text(
-              FirebaseAuth.instance.currentUser?.displayName?.toUpperCase() ??
-                  'User'.toUpperCase(),
-              style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: ColorUtility.main),
+              FirebaseAuth.instance.currentUser?.displayName?.toUpperCase() ?? 'User'.toUpperCase(),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: ColorUtility.main),
             ),
           ],
         ),
@@ -115,30 +128,26 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
                 ),
                 LabelWidget(
                   name: 'Top Rated',
-                  onSeeAllClicked: () {
-                    // toggleShowAllCourses();
-                    showAllCourses = !showAllCourses;
-                    setState(() {});
-                  },
+                  onSeeAllClicked: toggleShowAllTopRated,
                 ),
                 CoursesWidget(
                   futureCall: FirebaseFirestore.instance
                       .collection('courses')
                       .where('rank', isEqualTo: 'top rated')
+                      .limit(showAllTopRated ? count : 2)
                       .orderBy('created_date', descending: true)
                       .get(),
                   rankValue: 'top rated',
                 ),
                 LabelWidget(
                   name: 'Top Seller',
-                  onSeeAllClicked: () {
-                    toggleShowAllCourses();
-                  },
+                  onSeeAllClicked: toggleShowAllTopSeller,
                 ),
                 CoursesWidget(
                   futureCall: FirebaseFirestore.instance
                       .collection('courses')
                       .where('rank', isEqualTo: 'top seller')
+                      .limit(showAllTopSeller ? count : 2)
                       .orderBy('created_date', descending: true)
                       .get(),
                   rankValue: 'top seller',

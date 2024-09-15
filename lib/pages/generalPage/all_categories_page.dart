@@ -78,10 +78,8 @@ class AllCategoryPage extends StatelessWidget {
                 );
               }
 
-              var categories = List<Category>.from(snapshot.data?.docs
-                      .map((e) => Category.fromJson({'id': e.id, ...e.data()}))
-                      .toList() ??
-                  []);
+              var categories = List<Category>.from(
+                  snapshot.data?.docs.map((e) => Category.fromJson({'id': e.id, ...e.data()})).toList() ?? []);
 
               return Expanded(
                   child: ListView.builder(
@@ -91,9 +89,7 @@ class AllCategoryPage extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: ExpansionTileWidget(
                         titleTile: categories[index].name ?? 'No Name',
-                        Icons: isexpanded
-                            ? Icons.keyboard_double_arrow_down_outlined
-                            : Icons.double_arrow_outlined,
+                        icons: isexpanded ? Icons.keyboard_double_arrow_down_outlined : Icons.double_arrow_outlined,
                         body: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -122,8 +118,7 @@ class AllCategoryPage extends StatelessWidget {
                           CoursesWidget(
                             futureCall: FirebaseFirestore.instance
                                 .collection('courses')
-                                .where('caregory.id',
-                                    isEqualTo: categories[index].id)
+                                .where('caregory.id', isEqualTo: categories[index].id)
                                 .get(),
                           ),
                           // const SizedBox(

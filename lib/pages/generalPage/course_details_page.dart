@@ -25,26 +25,18 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   void initState() {
     context.read<CourseBloc>().add(CourseFetchEvent(widget.course));
     context.read<LectureBloc>().add(LectureEventInitial());
+
     super.initState();
   }
 
   bool applyChanges = false;
 
-  void initAnimation() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    if (!mounted) return;
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() {
+  void toggleApplyChanges() {
+    setState(() {
+      if (!applyChanges) {
         applyChanges = true;
-      });
+      }
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    initAnimation();
-
-    super.didChangeDependencies();
   }
 
   @override
@@ -52,24 +44,24 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
     return Scaffold(
         body: Stack(
       children: [
-        BlocBuilder<LectureBloc, LectureState>(builder: (ctx, state) {
+        BlocConsumer<LectureBloc, LectureState>(listener: (ctx, state) {
+          if (state is LectureChosenState) {
+            toggleApplyChanges();
+          }
+        }, builder: (ctx, state) {
           var stateEx = state is LectureChosenState ? state : null;
 
           if (stateEx == null) {
             return const SizedBox.shrink();
           }
 
-          return Container(
+          return SizedBox(
             height: 250,
-            child: stateEx.lecture.lecture_url == null ||
-                    stateEx.lecture.lecture_url == ''
+            child: stateEx.lecture.lecture_url == null || stateEx.lecture.lecture_url == ''
                 ? const Center(
                     child: Text(
                     'Invalid Url',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
                   ))
                 : VideoBoxWidget(
                     url: stateEx.lecture.lecture_url ?? '',
@@ -81,14 +73,11 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
             child: AnimatedContainer(
               decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25))),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
               duration: const Duration(seconds: 3),
               alignment: Alignment.bottomCenter,
               // height: MediaQuery.sizeOf(context).height - 220,
-              height:
-                  applyChanges ? MediaQuery.sizeOf(context).height - 220 : null,
+              height: applyChanges ? MediaQuery.sizeOf(context).height - 220 : null,
               curve: Curves.easeInOut,
               child: SafeArea(
                 child: Padding(
@@ -101,21 +90,19 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                       ),
                       Text(
                         widget.course.title ?? 'No Name',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 20),
+                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                       Text(
                         widget.course.instructor?.name ?? 'No Instructor Name',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 17),
+                        style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      _BodyWidget()
+                      const _BodyWidget()
                     ],
                   ),
                 ),
@@ -153,29 +140,24 @@ class __BodyWidgetState extends State<_BodyWidget> {
         return Column(
           children: [
             LectureChipsWidget(
-              selectedOption: (state is CourseOptionStateChanges)
-                  ? state.courseOption
-                  : null,
+              selectedOption: (state is CourseOptionStateChanges) ? state.courseOption : null,
               onChanged: (courseOption) {
-                context
-                    .read<CourseBloc>()
-                    .add(CourseOptionChosenEvent(courseOption));
+                context.read<CourseBloc>().add(CourseOptionChosenEvent(courseOption));
               },
             ),
             const SizedBox(
               height: 10,
             ),
             Expanded(
-                child: (state is CourseOptionStateChanges)
-                    ? CourseOptionsWidgets(
-                        course: context.read<CourseBloc>().course!,
-                        courseOption: state.courseOption,
-                        onLectureChosen: (lecture) {
-                          context
-                              .read<LectureBloc>()
-                              .add(LectureChosenEvent(lecture));
-                        })
-                    : const SizedBox.shrink())
+              child: (state is CourseOptionStateChanges)
+                  ? CourseOptionsWidgets(
+                      course: context.read<CourseBloc>().course!,
+                      courseOption: state.courseOption,
+                      onLectureChosen: (lecture) {
+                        context.read<LectureBloc>().add(LectureChosenEvent(lecture));
+                      })
+                  : const SizedBox.shrink(),
+            )
           ],
         );
       }),

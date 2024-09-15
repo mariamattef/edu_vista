@@ -1,17 +1,10 @@
 import 'package:edu_vista/blocs/cart/cart_bloc.dart';
-import 'package:edu_vista/models/course.dart';
 import 'package:edu_vista/pages/generalPage/course_details_page.dart';
 import 'package:edu_vista/pages/generalPage/payment_page.dart';
 import 'package:edu_vista/pages/paymob_manager/paymob_manager.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
-import 'package:edu_vista/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:flutter_pannable_rating_bar/flutter_pannable_rating_bar.dart';
-import 'package:paymob_payment/paymob_payment.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -53,8 +46,7 @@ class _CartPageState extends State<CartPage> {
                       ),
                       child: GridView.builder(
                         shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           childAspectRatio: .8,
                           mainAxisSpacing: 10,
@@ -134,8 +126,7 @@ class _CartPageState extends State<CartPage> {
                                     left: 5,
                                   ),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         '\$${course.price ?? ''}',
@@ -152,15 +143,13 @@ class _CartPageState extends State<CartPage> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 30, right: 10),
+                                  padding: const EdgeInsets.only(bottom: 30, right: 10),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       TextButton(
                                         onPressed: () async {
-                                          Navigator.pushNamed(
-                                              context, PaymentPage.id);
+                                          Navigator.pushNamed(context, PaymentPage.id);
 
                                           // PaymobPayment.instance.initialize(
                                           //   apiKey: dotenv.env[
@@ -192,8 +181,7 @@ class _CartPageState extends State<CartPage> {
                                       ),
                                       IconButton(
                                           onPressed: () {
-                                            BlocProvider.of<CartBloc>(context)
-                                                .add(
+                                            BlocProvider.of<CartBloc>(context).add(
                                               RemovingFromCartEvent(course),
                                             );
                                           },
@@ -211,8 +199,7 @@ class _CartPageState extends State<CartPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 25),
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
                       child: Column(
                         children: [
                           Padding(
@@ -229,11 +216,9 @@ class _CartPageState extends State<CartPage> {
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: ColorUtility.grayExtraLight),
+                                      borderRadius: BorderRadius.circular(20), color: ColorUtility.grayExtraLight),
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 20),
+                                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                                     child: Text(
                                       '\$${state.totalPrice.toStringAsFixed(2)}',
                                       style: const TextStyle(
@@ -253,12 +238,11 @@ class _CartPageState extends State<CartPage> {
 
                           ElevatedButton(
                             onPressed: () {
-                              () async => _pay();
+                              PaymobManager().pay(context, state.totalPrice.toInt());
                             },
                             style: ElevatedButton.styleFrom(
                                 fixedSize: const Size(100, 50),
-                                shape: BeveledRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6))),
+                                shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(6))),
                             child: const Text('PayMob'),
                           )
                           // CustomElevatedButton(
@@ -304,14 +288,5 @@ class _CartPageState extends State<CartPage> {
         },
       ),
     );
-  }
-
-  Future<void> _pay() async {
-    PaymobManager().getPaymentKey(10, "EGP").then((String paymentKey) {
-      launchUrl(
-        Uri.parse(
-            "https://accept.paymob.com/api/acceptance/iframes/791787?payment_token=$paymentKey"),
-      );
-    });
   }
 }

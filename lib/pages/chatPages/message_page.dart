@@ -1,10 +1,15 @@
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/chat.dart';
+
 class MessagesPage extends StatelessWidget {
   static const id = 'MessagesPage';
-  const MessagesPage({super.key});
+  const MessagesPage({super.key, required this.chat});
 
+  final Chat chat;
+
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,19 +20,18 @@ class MessagesPage extends StatelessWidget {
         backgroundColor: ColorUtility.deepYellow,
         foregroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        title: const Row(
+        title: Row(
           children: [
             BackButton(),
             CircleAvatar(
-              backgroundImage:
-                  NetworkImage("https://i.postimg.cc/cCsYDjvj/user-2.png"),
+              backgroundImage: NetworkImage(chat.image!),
             ),
             SizedBox(width: 16.0 * 0.75),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Kristin Watson",
+                  chat.name!,
                   style: TextStyle(fontSize: 16),
                 ),
                 Text(
@@ -57,8 +61,7 @@ class MessagesPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ListView.builder(
                 itemCount: demeChatMessages.length,
-                itemBuilder: (context, index) =>
-                    Message(message: demeChatMessages[index]),
+                itemBuilder: (context, index) => Message(message: demeChatMessages[index], imageUrl: chat.image!),
               ),
             ),
           ),
@@ -127,37 +130,25 @@ class _ChatInputFieldState extends State<ChatInputField> {
                                       Icons.attach_file,
                                       color: _showAttachment
                                           ? const Color(0xFF00BF6D)
-                                          : Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .color!
-                                              .withOpacity(0.64),
+                                          : Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.64),
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16.0 / 2),
+                                    padding: const EdgeInsets.symmetric(horizontal: 16.0 / 2),
                                     child: Icon(
                                       Icons.camera_alt_outlined,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge!
-                                          .color!
-                                          .withOpacity(0.64),
+                                      color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.64),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             filled: true,
-                            fillColor:
-                                const Color(0xFF00BF6D).withOpacity(0.08),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16.0 * 1.5, vertical: 16.0),
+                            fillColor: const Color(0xFF00BF6D).withOpacity(0.08),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0 * 1.5, vertical: 16.0),
                             border: const OutlineInputBorder(
                               borderSide: BorderSide.none,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
+                              borderRadius: BorderRadius.all(Radius.circular(50)),
                             ),
                           ),
                         ),
@@ -219,11 +210,7 @@ class MessageAttachmentCard extends StatelessWidget {
   final IconData iconData;
   final String title;
 
-  const MessageAttachmentCard(
-      {super.key,
-      required this.press,
-      required this.iconData,
-      required this.title});
+  const MessageAttachmentCard({super.key, required this.press, required this.iconData, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -249,11 +236,7 @@ class MessageAttachmentCard extends StatelessWidget {
             Text(
               title,
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .color!
-                        .withOpacity(0.8),
+                    color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.8),
                   ),
             )
           ],
@@ -267,9 +250,11 @@ class Message extends StatelessWidget {
   const Message({
     super.key,
     required this.message,
+    required this.imageUrl,
   });
 
   final ChatMessage message;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -289,14 +274,12 @@ class Message extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
       child: Row(
-        mainAxisAlignment:
-            message.isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: message.isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
           if (!message.isSender) ...[
-            const CircleAvatar(
+            CircleAvatar(
               radius: 12,
-              backgroundImage:
-                  NetworkImage("https://i.postimg.cc/cCsYDjvj/user-2.png"),
+              backgroundImage: NetworkImage(imageUrl),
             ),
             const SizedBox(width: 16.0 / 2),
           ],
@@ -322,8 +305,7 @@ class VideoMessage extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                  "https://i.postimg.cc/Ls1WtygL/Video-Place-Here.png"),
+              child: Image.network("https://i.postimg.cc/Ls1WtygL/Video-Place-Here.png"),
             ),
             Container(
               height: 25,
@@ -377,9 +359,7 @@ class AudioMessage extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     height: 2,
-                    color: message!.isSender
-                        ? Colors.white
-                        : ColorUtility.deepYellow,
+                    color: message!.isSender ? Colors.white : ColorUtility.deepYellow,
                   ),
                   Positioned(
                     left: 0,
@@ -387,9 +367,7 @@ class AudioMessage extends StatelessWidget {
                       height: 8,
                       width: 8,
                       decoration: BoxDecoration(
-                        color: message!.isSender
-                            ? Colors.white
-                            : ColorUtility.deepYellow,
+                        color: message!.isSender ? Colors.white : ColorUtility.deepYellow,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -400,8 +378,7 @@ class AudioMessage extends StatelessWidget {
           ),
           Text(
             "0.37",
-            style: TextStyle(
-                fontSize: 12, color: message!.isSender ? Colors.white : null),
+            style: TextStyle(fontSize: 12, color: message!.isSender ? Colors.white : null),
           ),
         ],
       ),
@@ -431,9 +408,7 @@ class TextMessage extends StatelessWidget {
       child: Text(
         message!.text,
         style: TextStyle(
-          color: message!.isSender
-              ? Colors.white
-              : Theme.of(context).textTheme.bodyLarge!.color,
+          color: message!.isSender ? Colors.white : Theme.of(context).textTheme.bodyLarge!.color,
         ),
       ),
     );

@@ -1,12 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_vista/cubit/auth_cubit.dart';
-import 'package:edu_vista/pages/cart_page/card_page.dart';
 import 'package:edu_vista/pages/profilePages/about_us_page.dart';
 import 'package:edu_vista/pages/profilePages/edit_profile_page.dart';
 import 'package:edu_vista/pages/profilePages/settings_profile_page.dart';
 import 'package:edu_vista/pages/cart_page/shop_items_page.dart';
-import 'package:edu_vista/utils/color_utilis.dart';
-import 'package:edu_vista/widgets/Custom_text_button.dart';
 import 'package:edu_vista/widgets/profile/profile_menu_widget.dart';
 import 'package:edu_vista/widgets/profile/proflle_pic_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfilePage extends StatefulWidget {
   static const String id = 'ProfilePage';
-  ProfilePage({super.key});
+  const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -62,18 +58,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     press: () => {
                       Navigator.pushNamed(context, EditProfilePage.id),
                     },
+                    iconData: Icons.edit,
                   ),
                   ProfileMenu(
                     text: "Setting ",
                     press: () {
                       Navigator.pushNamed(context, SettingsProfilePage.id);
                     },
+                    iconData: Icons.settings,
                   ),
                   ProfileMenu(
                     text: "About Us",
                     press: () {
                       Navigator.pushNamed(context, AboutUsPage.id);
                     },
+                    iconData: Icons.info,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -87,17 +86,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                 title: 'Are you want to log out?',
                                 data: 'Log Out',
                                 onPressed: () async {
-                                  await context
-                                      .read<AuthCubit>()
-                                      .logout(context);
+                                  await context.read<AuthCubit>().logout(context);
                                 },
                               ),
                               child: const Text(
                                 'Log out',
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600),
+                                style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.w600),
                               ),
                             );
                           },

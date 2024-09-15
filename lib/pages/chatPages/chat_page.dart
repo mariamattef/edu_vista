@@ -21,9 +21,7 @@ class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
     // Filter chats based on whether 'showActiveOnly' is true or false
-    List<Chat> displayedChats = showActiveOnly
-        ? chatsData.where((chat) => chat.isActive).toList()
-        : chatsData;
+    List<Chat> displayedChats = showActiveOnly ? chatsData.where((chat) => chat.isActive).toList() : chatsData;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -82,7 +80,8 @@ class _ChatsPageState extends State<ChatsPage> {
                 //   Navigator.pushNamed(context, MessagesPage.id, arguments: chat);
                 // },
                 press: () {
-                  Navigator.pushNamed(context, MessagesPage.id);
+                  // send user to the chat screen
+                  Navigator.pushNamed(context, MessagesPage.id, arguments: displayedChats[index]);
                 },
               ),
             ),
@@ -118,8 +117,7 @@ class ChatCard extends StatelessWidget {
     return InkWell(
       onTap: press,
       child: Padding(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0 * 0.75),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0 * 0.75),
         child: Row(
           children: [
             CircleAvatarWithActiveIndicator(
@@ -134,8 +132,7 @@ class ChatCard extends StatelessWidget {
                   children: [
                     Text(
                       chat.name ?? '',
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     const SizedBox(height: 8),
                     Opacity(
@@ -224,8 +221,7 @@ class CircleAvatarWithActiveIndicator extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFF00BF6D),
                 shape: BoxShape.circle,
-                border: Border.all(
-                    color: Theme.of(context).scaffoldBackgroundColor, width: 3),
+                border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 3),
               ),
             ),
           )

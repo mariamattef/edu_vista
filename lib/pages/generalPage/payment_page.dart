@@ -53,12 +53,11 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                () async => _pay();
+                // () async => _pay();
               },
               style: ElevatedButton.styleFrom(
                   fixedSize: const Size(100, 50),
-                  shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadius.circular(6))),
+                  shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(6))),
               child: const Text('PayMob'),
             )
           ],
@@ -77,12 +76,12 @@ class _PaymentPageState extends State<PaymentPage> {
   //   });
   //    print('>>>>>>>>>>>>>>object');
   // }
-  Future<void> _pay() async {
-    PaymobManager().getPaymentKey(10, "EGP").then((String paymentKey) {
-      launchUrl(
-        Uri.parse(
-            "https://accept.paymob.com/api/acceptance/iframes/791787?payment_token=$paymentKey"),
-      );
-    });
-  }
+  // Future<void> _pay() async {
+  //   PaymobManager().getPaymentKey(10, "EGP").then((String paymentKey) {
+  //     launchUrl(
+  //       Uri.parse(
+  //           "https://accept.paymob.com/api/acceptance/iframes/791787?payment_token=$paymentKey"),
+  //     );
+  //   });
+  // }
 }

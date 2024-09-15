@@ -28,10 +28,12 @@ class ProfilePicWidget extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             CircleAvatar(
-                backgroundImage:
-                    proPictureUrl != null && proPictureUrl.isNotEmpty
-                        ? NetworkImage(proPictureUrl) as ImageProvider
-                        : const AssetImage('assets/images/Personal_photo.png')),
+              backgroundImage: proPictureUrl != null && proPictureUrl.isNotEmpty
+                  ? NetworkImage(proPictureUrl) as ImageProvider
+                  : const AssetImage(
+                      'assets/images/Personal_photo.png',
+                    ),
+            ),
             Positioned(
               top: 120,
               left: 5,
@@ -39,13 +41,11 @@ class ProfilePicWidget extends StatelessWidget {
                 children: [
                   Text(
                     user?.displayName ?? 'No Name',
-                    style: const TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.w600),
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                   ),
                   Text(
                     user?.email ?? 'No email',
-                    style: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.w700),
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                   ),
                 ],
               ),

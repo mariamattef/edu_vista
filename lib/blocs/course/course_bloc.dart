@@ -21,11 +21,7 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
       return null;
     }
     try {
-      var result = await FirebaseFirestore.instance
-          .collection('courses')
-          .doc(course!.id)
-          .collection('lectures')
-          .get();
+      var result = await FirebaseFirestore.instance.collection('courses').doc(course!.id).collection('lectures').get();
 
       return result.docs
           .map((e) => Lecture.fromJson({
@@ -38,8 +34,7 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     }
   }
 
-  FutureOr<void> _onGetCourse(
-      CourseFetchEvent event, Emitter<CourseState> emit) async {
+  FutureOr<void> _onGetCourse(CourseFetchEvent event, Emitter<CourseState> emit) async {
     if (course != null) {
       course = null;
     }
@@ -47,8 +42,7 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     emit(CourseOptionStateChanges(CourseOptions.Lecture));
   }
 
-  FutureOr<void> _onCourseOptionChosen(
-      CourseOptionChosenEvent event, Emitter<CourseState> emit) {
+  FutureOr<void> _onCourseOptionChosen(CourseOptionChosenEvent event, Emitter<CourseState> emit) {
     emit(CourseOptionStateChanges(event.courseOptions));
   }
 }
