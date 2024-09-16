@@ -11,8 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   AuthCubit() : super(AuthInitial());
 
   Future<void> login({
@@ -82,7 +80,8 @@ class AuthCubit extends Cubit<AuthState> {
     required TextEditingController passwordController,
   }) async {
     try {
-      var credentials = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      var credentials =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
@@ -247,7 +246,8 @@ class AuthCubit extends Cubit<AuthState> {
         Navigator.pushReplacementNamed(context, LoginPage.id);
       }
     } on FirebaseAuthException catch (e) {
-      emit(AuthDeleteFailingState(e.message ?? 'An error occurred while deleting the account.'));
+      emit(AuthDeleteFailingState(
+          e.message ?? 'An error occurred while deleting the account.'));
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -283,51 +283,26 @@ class AuthCubit extends Cubit<AuthState> {
     var snapshot = await collection.get();
     return snapshot.size;
   }
-//   // Future<void> updateDisplayName(String name, BuildContext context) async {
-//     emit(UserNameUpdateLoading());
-//     try {
-//       var credentials = FirebaseAuth.instance.currentUser;
-//       if (credentials == null) {
-//         emit(UserNameUpdateFailed('No user logged in'));
-//       } else {
-//         await credentials.updateDisplayName(name);
-//         await credentials.reload();
-//         log('Name updated to: ${credentials.displayName}');
-//         emit(UserNameUpdateSuccess('Name updated successfully'));
-//         if (context.mounted) {
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             const SnackBar(
-//               backgroundColor: Colors.green,
-//               content: Text('Name updated successfully'),
-//             ),
-//           );
-//         }
-//       }
-//     } catch (e) {
-//       emit(UserNameUpdateFailed(e.toString()));
-//       if (!context.mounted) return;
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text('Error updating name: $e')),
-//       );
-//     }
-//   }
-// //
 
   Future<void> uploadProfilePicture(BuildContext context) async {
     emit(UProPicUpdateLoadingState());
 
-    var imageResult = await FilePicker.platform.pickFiles(type: FileType.image, withData: true);
+    var imageResult = await FilePicker.platform
+        .pickFiles(type: FileType.image, withData: true);
 
     if (imageResult != null) {
-      var storageRef = FirebaseStorage.instance.ref('images/${imageResult.files.first.name}');
+      var storageRef = FirebaseStorage.instance
+          .ref('images/${imageResult.files.first.name}');
 
       var uploadResult = await storageRef.putData(
           imageResult.files.first.bytes!,
           SettableMetadata(
-            contentType: 'image/${imageResult.files.first.name.split('.').last}',
+            contentType:
+                'image/${imageResult.files.first.name.split('.').last}',
           ));
 
-      FirebaseAuth.instance.currentUser!.updatePhotoURL(await uploadResult.ref.getDownloadURL());
+      FirebaseAuth.instance.currentUser!
+          .updatePhotoURL(await uploadResult.ref.getDownloadURL());
 
       if (uploadResult.state == TaskState.success) {
         var downloadUrl = await uploadResult.ref.getDownloadURL();

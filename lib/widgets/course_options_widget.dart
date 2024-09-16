@@ -3,9 +3,9 @@ import 'package:edu_vista/blocs/course/course_bloc.dart';
 import 'package:edu_vista/models/course.dart';
 import 'package:edu_vista/models/lecture.dart';
 import 'package:edu_vista/utils/app_enum.dart';
-import 'package:edu_vista/widgets/widdgits/certificate_widget.dart';
+import 'package:edu_vista/widgets/certificate_widget.dart';
 import 'package:edu_vista/widgets/download_widget.dart';
-import 'package:edu_vista/widgets/widdgits/lecture_widget.dart';
+import 'package:edu_vista/widgets/lecture_widget.dart';
 import 'package:edu_vista/widgets/more_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,9 +73,11 @@ class _CourseOptionsWidgetsState extends State<CourseOptionsWidgets> {
     print(widget.course.id);
     switch (widget.courseOption) {
       case CourseOptions.Lecture:
-        return LectureWidget(lectures: lectures, onLectureChosen: widget.onLectureChosen);
+        return LectureWidget(
+            lectures: lectures, onLectureChosen: widget.onLectureChosen);
       case CourseOptions.Download:
-        return DownloadWidget(lectures: lectures, onLectureChosen: widget.onLectureChosen);
+        return DownloadWidget(
+            lectures: lectures, onLectureChosen: widget.onLectureChosen);
 
       case CourseOptions.Certificate:
         return CertificateWidget(course: widget.course);

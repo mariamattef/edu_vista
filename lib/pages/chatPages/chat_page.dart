@@ -21,15 +21,16 @@ class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
     // Filter chats based on whether 'showActiveOnly' is true or false
-    List<Chat> displayedChats = showActiveOnly ? chatsData.where((chat) => chat.isActive).toList() : chatsData;
+    List<Chat> displayedChats = showActiveOnly
+        ? chatsData.where((chat) => chat.isActive).toList()
+        : chatsData;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: false,
         elevation: 0,
-        backgroundColor: ColorUtility.deepYellow,
-        foregroundColor: Colors.white,
+        backgroundColor: ColorUtility.grayExtraLight,
         automaticallyImplyLeading: false,
         title: const Text("Chats"),
         actions: [
@@ -45,7 +46,7 @@ class _ChatsPageState extends State<ChatsPage> {
         children: [
           Container(
             padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-            color: ColorUtility.deepYellow,
+            color: ColorUtility.grayExtraLight,
             child: Row(
               children: [
                 FillOutlineButton(
@@ -81,7 +82,8 @@ class _ChatsPageState extends State<ChatsPage> {
                 // },
                 press: () {
                   // send user to the chat screen
-                  Navigator.pushNamed(context, MessagesPage.id, arguments: displayedChats[index]);
+                  Navigator.pushNamed(context, MessagesPage.id,
+                      arguments: displayedChats[index]);
                 },
               ),
             ),
@@ -117,7 +119,8 @@ class ChatCard extends StatelessWidget {
     return InkWell(
       onTap: press,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0 * 0.75),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0 * 0.75),
         child: Row(
           children: [
             CircleAvatarWithActiveIndicator(
@@ -132,7 +135,8 @@ class ChatCard extends StatelessWidget {
                   children: [
                     Text(
                       chat.name ?? '',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     const SizedBox(height: 8),
                     Opacity(
@@ -178,7 +182,7 @@ class FillOutlineButton extends StatelessWidget {
         side: const BorderSide(color: Colors.white),
       ),
       elevation: isFilled ? 2 : 0,
-      color: isFilled ? Colors.white : Colors.transparent,
+      color: isFilled ? Colors.white : ColorUtility.deepYellow,
       onPressed: press,
       child: Text(
         text,
@@ -221,7 +225,8 @@ class CircleAvatarWithActiveIndicator extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFF00BF6D),
                 shape: BoxShape.circle,
-                border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 3),
+                border: Border.all(
+                    color: Theme.of(context).scaffoldBackgroundColor, width: 3),
               ),
             ),
           )

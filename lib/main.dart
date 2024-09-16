@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:edu_vista/blocs/cart/cart_bloc.dart';
 import 'package:edu_vista/blocs/course/course_bloc.dart';
 import 'package:edu_vista/blocs/lecture/lecture_bloc.dart';
@@ -12,7 +10,6 @@ import 'package:edu_vista/pages/chatPages/calls_search_page.dart';
 import 'package:edu_vista/pages/cart_page/card_page.dart';
 import 'package:edu_vista/pages/chatPages/chat_page.dart';
 import 'package:edu_vista/pages/chatPages/contacts_page.dart';
-import 'package:edu_vista/pages/generalPage/payment_page.dart';
 import 'package:edu_vista/pages/profilePages/about_us_page.dart';
 import 'package:edu_vista/pages/profilePages/edit_profile_page.dart';
 import 'package:edu_vista/pages/chatPages/message_page.dart';
@@ -71,7 +68,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -103,13 +99,16 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (context) => const SignUpPage());
 
           case ResetPasswordPage.id:
-            return MaterialPageRoute(builder: (context) => const ResetPasswordPage());
+            return MaterialPageRoute(
+                builder: (context) => const ResetPasswordPage());
 
           case ConfirmPasswrdPage.id:
-            return MaterialPageRoute(builder: (context) => const ConfirmPasswrdPage());
+            return MaterialPageRoute(
+                builder: (context) => const ConfirmPasswrdPage());
 
           case OnBoardingpage.id:
-            return MaterialPageRoute(builder: (context) => const OnBoardingpage());
+            return MaterialPageRoute(
+                builder: (context) => const OnBoardingpage());
 
           case HomePage.id:
             return MaterialPageRoute(builder: (context) => const HomePage());
@@ -119,21 +118,8 @@ class MyApp extends StatelessWidget {
                 builder: (context) => CourseDetailsPage(
                       course: data,
                     ));
-          // case CategoriesPage.id:
-          //   return MaterialPageRoute(
-          //       builder: (context) => const CategoriesPage());
           case AllCategoryPage.id:
             return MaterialPageRoute(builder: (context) => AllCategoryPage());
-          // case AllCoursesPage.id:
-          //   if (data is String) {
-          //     return MaterialPageRoute(
-          //       builder: (context) => AllCoursesPage(
-          //         rankValue: data,
-          //       ),
-          //     );
-          //   } else {
-          //     return null;
-          //   }
 
           case ProfilePage.id:
             return MaterialPageRoute(builder: (context) => ProfilePage());
@@ -146,30 +132,35 @@ class MyApp extends StatelessWidget {
                       categoryName: data,
                     ));
           case EditProfilePage.id:
-            return MaterialPageRoute(builder: (context) => const EditProfilePage());
+            return MaterialPageRoute(
+                builder: (context) => const EditProfilePage());
           case AboutUsPage.id:
             return MaterialPageRoute(builder: (context) => const AboutUsPage());
           case SettingsProfilePage.id:
-            return MaterialPageRoute(builder: (context) => const SettingsProfilePage());
+            return MaterialPageRoute(
+                builder: (context) => const SettingsProfilePage());
 
           case ChatsPage.id:
             return MaterialPageRoute(builder: (context) => const ChatsPage());
           case CallsSearchPage.id:
-            return MaterialPageRoute(builder: (context) => const CallsSearchPage());
+            return MaterialPageRoute(
+                builder: (context) => const CallsSearchPage());
           case ContactsPage.id:
-            return MaterialPageRoute(builder: (context) => const ContactsPage());
+            return MaterialPageRoute(
+                builder: (context) => const ContactsPage());
           case MessagesPage.id:
-            return MaterialPageRoute(builder: (context) => MessagesPage(chat: data as Chat));
+            return MaterialPageRoute(
+                builder: (context) => MessagesPage(chat: data as Chat));
           case ContactSearchChatPage.id:
-            return MaterialPageRoute(builder: (context) => ContactSearchChatPage());
+            return MaterialPageRoute(
+                builder: (context) => ContactSearchChatPage());
 
           case ShopItemsPage.id:
-            return MaterialPageRoute(builder: (context) => const ShopItemsPage());
+            return MaterialPageRoute(
+                builder: (context) => const ShopItemsPage());
 
           case SearchPage.id:
             return MaterialPageRoute(builder: (context) => const SearchPage());
-          case PaymentPage.id:
-            return MaterialPageRoute(builder: (context) => PaymentPage());
 
           default:
             return MaterialPageRoute(builder: (context) => const SplashPage());

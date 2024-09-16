@@ -3,11 +3,8 @@ import 'package:edu_vista/cubit/auth_cubit.dart';
 import 'package:edu_vista/models/course.dart';
 import 'package:edu_vista/pages/cart_page/shop_items_page.dart';
 import 'package:edu_vista/pages/generalPage/all_categories_page.dart';
-import 'package:edu_vista/pages/cart_page/card_page.dart';
-import 'package:edu_vista/pages/generalPage/category_course_page.dart';
-import 'package:edu_vista/pages/generalPage/payment_page.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
-import 'package:edu_vista/widgets/widdgits/categories_widget.dart';
+import 'package:edu_vista/widgets/categories_widget.dart';
 import 'package:edu_vista/widgets/courses_widget.dart';
 import 'package:edu_vista/widgets/label_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,10 +40,6 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
   @override
   void initState() {
     super.initState();
-    // context.read<AuthCubit>().checkUserStatus();
-    // if (!showAllCourses) {
-    //   widget.courses = widget.courses?.take(2).toList();
-    // }
     context.read<AuthCubit>().userLoginOrNot();
     init();
   }
@@ -90,8 +83,12 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
               width: 5,
             ),
             Text(
-              FirebaseAuth.instance.currentUser?.displayName?.toUpperCase() ?? 'User'.toUpperCase(),
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: ColorUtility.main),
+              FirebaseAuth.instance.currentUser?.displayName?.toUpperCase() ??
+                  'User'.toUpperCase(),
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: ColorUtility.main),
             ),
           ],
         ),
@@ -107,9 +104,6 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
           ),
         ],
       ),
-      // floatingActionButton: FloatingActionButton(onPressed: () {
-      //   Navigator.pushNamed(context, PaymentPage.id);
-      // }),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -118,6 +112,7 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
               children: [
                 LabelWidget(
                   name: 'Categories',
+                  text: 'See All',
                   onSeeAllClicked: () {
                     Navigator.pushNamed(context, AllCategoryPage.id);
                   },
@@ -128,6 +123,7 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
                 ),
                 LabelWidget(
                   name: 'Top Rated',
+                  text: showAllTopRated ? 'Hide Courses' : 'See All',
                   onSeeAllClicked: toggleShowAllTopRated,
                 ),
                 CoursesWidget(
@@ -142,6 +138,7 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
                 LabelWidget(
                   name: 'Top Seller',
                   onSeeAllClicked: toggleShowAllTopSeller,
+                  text: showAllTopSeller ? 'Hide Courses' : 'See All',
                 ),
                 CoursesWidget(
                   futureCall: FirebaseFirestore.instance

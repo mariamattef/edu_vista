@@ -1,6 +1,5 @@
 import 'package:edu_vista/blocs/cart/cart_bloc.dart';
 import 'package:edu_vista/pages/generalPage/course_details_page.dart';
-import 'package:edu_vista/pages/generalPage/payment_page.dart';
 import 'package:edu_vista/pages/paymob_manager/paymob_manager.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +45,8 @@ class _CartPageState extends State<CartPage> {
                       ),
                       child: GridView.builder(
                         shrinkWrap: true,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           childAspectRatio: .8,
                           mainAxisSpacing: 10,
@@ -126,7 +126,8 @@ class _CartPageState extends State<CartPage> {
                                     left: 5,
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         '\$${course.price ?? ''}',
@@ -143,36 +144,15 @@ class _CartPageState extends State<CartPage> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 30, right: 10),
+                                  padding: const EdgeInsets.only(
+                                      bottom: 30, right: 10),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       TextButton(
                                         onPressed: () async {
-                                          Navigator.pushNamed(context, PaymentPage.id);
-
-                                          // PaymobPayment.instance.initialize(
-                                          //   apiKey: dotenv.env[
-                                          //       'apiKey']!, // from dashboard Select Settings -> Account Info -> API Key
-                                          //   integrationID: int.parse(dotenv.env[
-                                          //       'integrationID']!), // from dashboard Select Developers -> Payment Integrations -> Online Card ID
-                                          //   iFrameID: int.parse(dotenv.env[
-                                          //       'iFrameID']!), // from paymob Select Developers -> iframes
-                                          // );
-
-                                          // final PaymobResponse? response =
-                                          //     await PaymobPayment.instance.pay(
-                                          //   context: context,
-                                          //   currency: "EGP",
-                                          //   amountInCents: "20000", // 200 EGP
-                                          // );
-
-                                          // if (response != null) {
-                                          //   print(
-                                          //       'Response: ${response.transactionID}');
-                                          //   print(
-                                          //       'Response: ${response.success}');
-                                          // }
+                                          PaymobManager().pay(context,
+                                              state.totalPrice.toInt());
                                         },
                                         child: const Text(
                                           'Check Out',
@@ -181,7 +161,8 @@ class _CartPageState extends State<CartPage> {
                                       ),
                                       IconButton(
                                           onPressed: () {
-                                            BlocProvider.of<CartBloc>(context).add(
+                                            BlocProvider.of<CartBloc>(context)
+                                                .add(
                                               RemovingFromCartEvent(course),
                                             );
                                           },
@@ -199,7 +180,8 @@ class _CartPageState extends State<CartPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 25),
                       child: Column(
                         children: [
                           Padding(
@@ -216,9 +198,11 @@ class _CartPageState extends State<CartPage> {
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: ColorUtility.grayExtraLight),
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: ColorUtility.grayExtraLight),
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
                                     child: Text(
                                       '\$${state.totalPrice.toStringAsFixed(2)}',
                                       style: const TextStyle(
@@ -235,45 +219,17 @@ class _CartPageState extends State<CartPage> {
                           const SizedBox(
                             height: 20,
                           ),
-
                           ElevatedButton(
                             onPressed: () {
-                              PaymobManager().pay(context, state.totalPrice.toInt());
+                              PaymobManager()
+                                  .pay(context, state.totalPrice.toInt());
                             },
                             style: ElevatedButton.styleFrom(
-                                fixedSize: const Size(100, 50),
-                                shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(6))),
-                            child: const Text('PayMob'),
+                                fixedSize: const Size(250, 50),
+                                shape: BeveledRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6))),
+                            child: const Text('PayMob Method'),
                           )
-                          // CustomElevatedButton(
-                          //   width: double.infinity,
-                          //   onPressed: () async {
-                          //     Navigator.pushNamed(context, PaymentPage.id);
-
-                          //     // PaymobPayment.instance.initialize(
-                          //     //   apiKey: dotenv.env[
-                          //     //       'apiKey']!, // from dashboard Select Settings -> Account Info -> API Key
-                          //     //   integrationID: int.parse(dotenv.env[
-                          //     //       'integrationID']!), // from dashboard Select Developers -> Payment Integrations -> Online Card ID
-                          //     //   iFrameID: int.parse(dotenv.env[
-                          //     //       'iFrameID']!), // from paymob Select Developers -> iframes
-                          //     // );
-
-                          //     final PaymobResponse? response =
-                          //         await PaymobPayment.instance.pay(
-                          //       context: context,
-                          //       currency: "EGP",
-                          //       amountInCents: "20000", // 200 EGP
-                          //     );
-
-                          //     if (response != null) {
-                          //       // log('Response: ${response.transactionID}');
-                          //       // log('Response: ${response.success}');
-                          //     }
-                          //   },
-
-                          //   child: const Text('Check Out'),
-                          // ),
                         ],
                       ),
                     ),

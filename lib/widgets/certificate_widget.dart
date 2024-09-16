@@ -17,7 +17,7 @@ class CertificateWidget extends StatelessWidget {
       backgroundColor: ColorUtility.gbScaffold,
       // elevation: 5,
       child: Padding(
-        padding: const EdgeInsets.all(40.0),
+        padding: const EdgeInsets.all(10.0),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -31,7 +31,7 @@ class CertificateWidget extends StatelessWidget {
                   color: Color(0xff202244),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 5),
               const Text(
                 'This Certifies that',
                 style: TextStyle(
@@ -58,7 +58,7 @@ class CertificateWidget extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Text(
                 course.title ?? 'No Title',
                 style: const TextStyle(
@@ -67,7 +67,7 @@ class CertificateWidget extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
               Text(
                 'Issued on ${(DateTime.now())}',
                 style: const TextStyle(
@@ -76,7 +76,7 @@ class CertificateWidget extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Text(
                 'ID: ${course.id}',
                 style: const TextStyle(
@@ -86,22 +86,20 @@ class CertificateWidget extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Text(
                 course.instructor?.name ?? 'No Name',
                 style: const TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 16.66,
                   color: ColorUtility.main,
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               const Text(
                 'Virginia M. Patterso',
                 style: TextStyle(
-                  ///ToDo ////////////////////////////// font not apeard
-                  fontFamily: 'PlaywriteCU-Regular',
+                  fontFamily: 'PlaywriteCU',
                   fontSize: 17.35,
                   color: ColorUtility.deepYellow,
                   fontWeight: FontWeight.w400,
@@ -111,7 +109,6 @@ class CertificateWidget extends StatelessWidget {
               const Text(
                 'Virginia M. Patterso',
                 style: TextStyle(
-                  fontFamily: 'Jost',
                   fontSize: 11.11,
                   color: ColorUtility.main,
                   fontWeight: FontWeight.w600,

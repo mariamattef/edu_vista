@@ -1,7 +1,7 @@
 import 'package:edu_vista/pages/cart_page/card_page.dart';
 import 'package:edu_vista/pages/cart_page/shop_items_page.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
-import 'package:edu_vista/widgets/widdgits/categories_widget.dart';
+import 'package:edu_vista/widgets/categories_widget.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatelessWidget {

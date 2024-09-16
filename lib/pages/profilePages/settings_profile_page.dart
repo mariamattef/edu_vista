@@ -1,6 +1,5 @@
 import 'package:edu_vista/pages/authPages/confirm_password_page.dart';
 import 'package:edu_vista/pages/authPages/reset_password_page.dart';
-import 'package:edu_vista/pages/generalPage/payment_page.dart';
 import 'package:edu_vista/pages/profilePages/profile_page.dart';
 import 'package:edu_vista/widgets/profile_menu_cart_widget.dart';
 import 'package:flutter/material.dart';
@@ -43,14 +42,6 @@ class SettingsProfilePage extends StatelessWidget {
                   subTitle: "Change your password",
                   press: () {
                     Navigator.pushNamed(context, ConfirmPasswrdPage.id);
-                  },
-                ),
-                ProfileMenuCard(
-                  svgSrc: 'assets/images/iconmonstr-credit-card-thin.svg',
-                  title: "Payment Methods",
-                  subTitle: "Add your credit & debit cards",
-                  press: () {
-                    Navigator.pushNamed(context, PaymentPage.id);
                   },
                 ),
               ],

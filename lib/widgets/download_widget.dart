@@ -29,9 +29,10 @@ class _DownloadWidgetState extends State<DownloadWidget> {
       );
     } else {
       return GridView.count(
-        mainAxisSpacing: 15,
+        mainAxisSpacing: 20,
         crossAxisSpacing: 15,
-        shrinkWrap: true,
+        // shrinkWrap: true,
+        childAspectRatio: .9,
         crossAxisCount: 2,
         children: List.generate(widget.lectures!.length, (index) {
           return InkWell(

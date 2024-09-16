@@ -6,12 +6,15 @@ class LabelWidget extends StatelessWidget {
   bool showAllCourses = false;
   final Course? courses;
   final void Function()? onSeeAllClicked;
+  String? text;
+
   LabelWidget(
       {required this.name,
       this.showAllCourses = false,
       this.onSeeAllClicked,
       super.key,
-      this.courses});
+      this.courses,
+      this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,7 @@ class LabelWidget extends StatelessWidget {
           InkWell(
             onTap: onSeeAllClicked,
             child: Text(
-              showAllCourses ? 'Hide Courses' : 'See All',
+              '$text',
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
           ),

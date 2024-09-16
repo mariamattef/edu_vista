@@ -1,5 +1,5 @@
 import 'package:edu_vista/utils/color_utilis.dart';
-import 'package:edu_vista/widgets/widdgits/categories_widget.dart';
+import 'package:edu_vista/widgets/categories_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
