@@ -21,13 +21,7 @@ class _LectureWidgetState extends State<LectureWidget> {
   Lecture? selectedLecture;
   @override
   Widget build(BuildContext context) {
-    // print(widget.course?.id); /////// Nul
-    //////////
-    ///////////
-    //////
-    ///😥😥😏
-    //////////////////
-    //////////////
+   
     if (isLoading) {
       return const Center(
         child: CircularProgressIndicator(),

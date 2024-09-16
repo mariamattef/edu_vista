@@ -62,7 +62,7 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
                   return const Text(
                     'Welcome',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w700,
                     ),
                   );
@@ -83,9 +83,9 @@ class _HomeServiceWidgetState extends State<HomeServiceWidget> {
               width: 5,
             ),
             Text(
-              FirebaseAuth.instance.currentUser?.displayName?.toUpperCase() ??
-                  'User'.toUpperCase(),
+              FirebaseAuth.instance.currentUser?.displayName ?? 'User',
               style: const TextStyle(
+                  overflow: TextOverflow.ellipsis,
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                   color: ColorUtility.main),

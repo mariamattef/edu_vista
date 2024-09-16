@@ -1,7 +1,7 @@
 import 'package:edu_vista/pages/authPages/confirm_password_page.dart';
 import 'package:edu_vista/pages/authPages/reset_password_page.dart';
 import 'package:edu_vista/pages/profilePages/profile_page.dart';
-import 'package:edu_vista/widgets/profile_menu_cart_widget.dart';
+import 'package:edu_vista/widgets/profile/profile_menu_cart_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

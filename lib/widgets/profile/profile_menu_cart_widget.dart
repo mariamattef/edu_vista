@@ -31,15 +31,6 @@ class ProfileMenuCard extends StatelessWidget {
                     const Color(0xFF010F07).withOpacity(0.64),
                     BlendMode.srcIn,
                   )),
-              // SvgPicture.string(
-              //   svgSrc!,
-              //   height: 24,
-              //   width: 24,
-              //   colorFilter: ColorFilter.mode(
-              //     const Color(0xFF010F07).withOpacity(0.64),
-              //     BlendMode.srcIn,
-              //   ),
-              // ),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
